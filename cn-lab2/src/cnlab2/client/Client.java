@@ -22,11 +22,11 @@ public class Client {
 
 	public void handle(HTTPCommand command, URI uri, int port) throws UnknownHostException, IOException, IllegalArgumentException {
 		if (!this.canHaveAsCommand(command))
-			throw new IllegalArgumentException("Can't handle your shit");
+			throw new IllegalArgumentException("Invalid command:" + command.toString());
 		if (!this.canHaveAsURI(uri))
-			throw new IllegalArgumentException("Excuse you! where?");
+			throw new IllegalArgumentException("Invalid URI:" + uri.toString());
 		if (!this.canHaveAsPort(port))
-			throw new IllegalArgumentException("You want me to stick it where?");
+			throw new IllegalArgumentException("Invalid port: " + Integer.toString(port));
 		
 	}
 }

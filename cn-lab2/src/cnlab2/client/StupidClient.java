@@ -5,7 +5,7 @@ public abstract class StupidClient {
 	public static void main(String[] args) throws Exception {
 
 		if (args.length != 4) {
-			System.out.println("You idiot!");
+			System.out.println("Usage: Command Uri Port Version");
 		}
 
 		HTTPCommand command = HTTPCommand.parseCommand(args[INDEX_COMMAND]);
@@ -19,7 +19,7 @@ public abstract class StupidClient {
 		} else if (version.equals("1.1")) {
 			client = new HTTP11Client();
 		} else {
-			System.out.println("You done goofed!");
+			throw new IllegalAccessException("Invalid version: " + version);
 		}
 		
 		do {

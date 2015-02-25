@@ -19,13 +19,12 @@ public class URI {
 
 	@Override
 	public String toString() {
-		return "URI [protocol=" + getProtocol() + ", host=" + getHost()
-				+ ", resource=" + getResource() + "]";
-	}
-
-	public static void main(String[] args) throws IllegalAccessException {
-		System.out.println(new URI("http://www.google.com/index.html"));
-
+		return "URI "
+				+ "["
+				+ "protocol=" + getProtocol() + ", "
+				+ "host=" + getHost() + ", "
+				+ "resource=" + getResource()
+				+ "]";
 	}
 
 	public String getResource() {
