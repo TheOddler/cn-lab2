@@ -11,10 +11,15 @@ public abstract class Handler {
 
 	private Client client;
 	private URI uri;
+	private int port;
 
 	public Handler(Client client, URI uri) {
+		this(client, uri, 80);
+	}
+	public Handler(Client client, URI uri, int port) {
 		setClient(client);
 		setUri(uri);
+		setPort(port);
 	}
 
 	public abstract Response handle() throws UnknownHostException, IOException;
@@ -65,6 +70,14 @@ public abstract class Handler {
 
 	private void setUri(URI uri) {
 		this.uri = uri;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	private void setPort(int port) {
+		this.port = port;
 	}
 
 }

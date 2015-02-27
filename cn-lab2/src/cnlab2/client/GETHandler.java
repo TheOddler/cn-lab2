@@ -12,7 +12,7 @@ public class GETHandler extends Handler {
 	
 	@Override
 	public Response handle() throws UnknownHostException, IOException {
-		Socket socket = getClient().getSocketFor(getUri(), 80);
+		Socket socket = getClient().getSocketFor(getUri(), getPort());
 		
 		sendString(socket, getRequestString("GET"));
 		
