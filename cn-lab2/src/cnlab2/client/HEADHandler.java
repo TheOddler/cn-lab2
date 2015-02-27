@@ -12,7 +12,7 @@ public class HEADHandler extends Handler {
 	
 	@Override
 	public Response handle() throws UnknownHostException, IOException {
-		Socket socket = getClient().getSocketFor(getUri(), getPort());
+		Socket socket = getClient().getSocketFor(getUri());
 		
 		sendString(socket, getRequestString("HEAD"));
 		

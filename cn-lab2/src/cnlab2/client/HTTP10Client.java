@@ -72,8 +72,8 @@ public class HTTP10Client extends Client {
 		
 	}
 
-	public Socket getSocketFor(URI uri, int port) throws UnknownHostException, IOException {
-		return new Socket(uri.getHost(), port);
+	public Socket getSocketFor(URI uri) throws UnknownHostException, IOException {
+		return new Socket(uri.getHost(), uri.getPort());
 	}
 
 	@Override

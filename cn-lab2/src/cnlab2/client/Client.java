@@ -31,7 +31,7 @@ public abstract class Client {
 		
 	}
 	
-	public abstract Socket getSocketFor(URI uri, int port) throws UnknownHostException, IOException;
+	public abstract Socket getSocketFor(URI uri) throws UnknownHostException, IOException;
 	
 	public abstract String getVersion();
 }

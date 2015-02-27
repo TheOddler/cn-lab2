@@ -15,7 +15,7 @@ public class PostHandler extends Handler {
 	public Response handle() throws UnknownHostException, IOException {
 		String r = getRequestString("POST");
 		
-		Socket socket = getClient().getSocketFor(getUri(), 80);
+		Socket socket = getClient().getSocketFor(getUri());
 		
 		Scanner sc = new Scanner(System.in);
 		StringBuilder contentBuilder = new StringBuilder();
@@ -30,6 +30,8 @@ public class PostHandler extends Handler {
 		}
 		
 		sendString(socket, r);
+		
+		sc.close();
 		
 		Response result = new Response(contentBuilder.toString());
 		return result;

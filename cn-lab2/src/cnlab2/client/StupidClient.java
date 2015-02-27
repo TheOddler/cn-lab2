@@ -9,8 +9,8 @@ public abstract class StupidClient {
 		}
 
 		HTTPCommand command = HTTPCommand.parseCommand(args[INDEX_COMMAND]);
-		URI uri = new URI(args[INDEX_URI]);
 		int port = Integer.parseInt(args[INDEX_PORT]);
+		URI uri = new URI(args[INDEX_URI], port);
 		
 		String version = args[INDEX_VERSION];
 		Client client = null;

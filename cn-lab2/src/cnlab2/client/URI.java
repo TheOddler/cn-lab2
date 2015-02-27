@@ -4,8 +4,9 @@ public class URI {
 	private String protocol;
 	private String host;
 	private String resource;
+	private int port;
 
-	public URI(String uriStr) throws IllegalAccessException {
+	public URI(String uriStr, int port) throws IllegalAccessException {
 		if (uriStr == null) {
 			throw new IllegalAccessException("WTF");
 		}
@@ -15,6 +16,8 @@ public class URI {
 		setProtocol(uriStr.substring(0, index1));
 		setHost(uriStr.substring(index1 + "://".length(), index2));
 		setResource(uriStr.substring(index2));
+		
+		this.setPort(port);
 	}
 
 	@Override
@@ -55,5 +58,13 @@ public class URI {
 		this.protocol = protocol;
 	}
 	
+	public int getPort() {
+		return port;
+	}
+
+	private void setPort(int port) {
+		this.port = port;
+	}
+
 	private static final String DEFAULT_RESOURCE = "/index.html";
 }

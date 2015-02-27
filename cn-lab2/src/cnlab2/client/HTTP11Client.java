@@ -11,8 +11,8 @@ public class HTTP11Client extends Client{
 		super();
 	}
 	
-	public Socket getSocketFor(URI uri, int port) throws UnknownHostException, IOException {
-		return new Socket(uri.getHost(), port);
+	public Socket getSocketFor(URI uri) throws UnknownHostException, IOException {
+		return new Socket(uri.getHost(), uri.getPort());
 		// Dummy needs proper implementation.
 	}
 
