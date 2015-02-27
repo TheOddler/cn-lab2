@@ -18,6 +18,17 @@ public abstract class Handler {
 	}
 
 	public abstract Response handle() throws UnknownHostException, IOException;
+	
+	public String getRequestString(String command) {
+		StringBuilder requestBuilder = new StringBuilder();
+		requestBuilder.append(command);
+		requestBuilder.append(" ");
+		requestBuilder.append(getUri().getResource());
+		requestBuilder.append(" ");
+		requestBuilder.append(getClient().getVersion());
+		requestBuilder.append("\n\n");
+		return requestBuilder.toString();
+	}
 
 	public Response getResponse(Socket socket) throws IOException {
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(

@@ -14,20 +14,9 @@ public class GETHandler extends Handler {
 	public Response handle() throws UnknownHostException, IOException {
 		Socket socket = getClient().getSocketFor(getUri(), 80);
 		
-		sendString(socket, getRequestString());
+		sendString(socket, getRequestString("GET"));
 		
 		return getResponse(socket);
-	}
-	
-	String getRequestString() {
-		StringBuilder requestBuilder = new StringBuilder();
-		requestBuilder.append("GET");
-		requestBuilder.append(" ");
-		requestBuilder.append(getUri().getResource());
-		requestBuilder.append(" ");
-		requestBuilder.append(getClient().getVersion());
-		requestBuilder.append("\n\n");
-		return requestBuilder.toString();
 	}
 	
 }
