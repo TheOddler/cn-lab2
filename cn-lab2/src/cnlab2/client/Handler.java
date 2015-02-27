@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public abstract class Handler {
 
@@ -16,7 +17,7 @@ public abstract class Handler {
 		setUri(uri);
 	}
 
-	public abstract Response handle();
+	public abstract Response handle() throws UnknownHostException, IOException;
 
 	public Response getResponse(Socket socket) throws IOException {
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
