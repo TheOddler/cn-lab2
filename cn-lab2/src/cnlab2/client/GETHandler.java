@@ -5,11 +5,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class GETHandler extends Handler {
-
+	
 	public GETHandler(Client client, URI uri) {
 		super(client, uri);
 	}
-
+	
 	@Override
 	public Response handle() throws UnknownHostException, IOException {
 		Socket socket = getClient().getSocketFor(getUri(), 80);
@@ -25,9 +25,9 @@ public class GETHandler extends Handler {
 		requestBuilder.append(" ");
 		requestBuilder.append(getUri().getResource());
 		requestBuilder.append(" ");
-		requestBuilder.append("HTTP/1.0\n");
-		requestBuilder.append("\n");
+		requestBuilder.append(getClient().getVersion());
+		requestBuilder.append("\n\n");
 		return requestBuilder.toString();
 	}
-
+	
 }
