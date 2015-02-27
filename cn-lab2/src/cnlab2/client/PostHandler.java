@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-import common.Response;
+import cnlab2.common.Response;
 
 public class PostHandler extends Handler {
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import common.Response;
+import cnlab2.common.Response;
 
 public class HEADHandler extends Handler {
 
