@@ -1,5 +1,7 @@
 package cnlab2.client;
 
-public abstract class Handler {
+import java.net.Socket;
 
+public abstract class Handler {
+	public abstract void handle(Socket socket);
 }
