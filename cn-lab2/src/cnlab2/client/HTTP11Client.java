@@ -25,10 +25,12 @@ public class HTTP11Client extends Client{
 			return new HEADHandler(this, uri);
 		case "POST":
 			return new POSTHandler(this, uri);
+		case "TRACE":
+			return new TRACEHandler(this, uri);
 		case "OPTIONS":
+			return new OPTIONSHandler(this, uri);
 		case "PUT":
 		case "DELETE":
-		case "TRACE":
 		case "CONNECT":
 			throw new IllegalArgumentException("Command not yet implemented");
 		default:
