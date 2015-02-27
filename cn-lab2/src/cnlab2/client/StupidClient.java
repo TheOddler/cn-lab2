@@ -22,10 +22,7 @@ public abstract class StupidClient {
 			throw new IllegalAccessException("Invalid version: " + version);
 		}
 		
-		do {
-			client.handle(command, uri, port);
-			System.exit(0);
-		} while(!command.equals("QUIT"));
+		client.handle(command, uri, port);
 
 	}
 	
