@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import common.Response;
+
 public class PostHandler extends Handler {
 
 	public PostHandler(Client client, URI uri) {

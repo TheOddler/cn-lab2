@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import common.Response;
+
 public abstract class Handler {
 
 	private Client client;

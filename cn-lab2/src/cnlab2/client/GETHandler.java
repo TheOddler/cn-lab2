@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import common.Response;
+
 public class GETHandler extends Handler {
 	
 	public GETHandler(Client client, URI uri) {

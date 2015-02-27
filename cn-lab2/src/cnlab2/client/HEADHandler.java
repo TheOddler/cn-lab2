@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import common.Response;
+
 public class HEADHandler extends Handler {
 
 	public HEADHandler(Client client, URI uri) {

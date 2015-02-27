@@ -1,4 +1,4 @@
-package cnlab2.client;
+package common;
 
 public class Response {
 	private final String header;
