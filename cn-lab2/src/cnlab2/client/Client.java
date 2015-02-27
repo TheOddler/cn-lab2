@@ -1,9 +1,10 @@
 package cnlab2.client;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client {
+public abstract class Client {
 
 	public Client() {
 	}
@@ -29,4 +30,6 @@ public class Client {
 			throw new IllegalArgumentException("Invalid port: " + Integer.toString(port));
 		
 	}
+	
+	public abstract Socket getSocketFor(URI uri, int port) throws UnknownHostException, IOException;
 }
