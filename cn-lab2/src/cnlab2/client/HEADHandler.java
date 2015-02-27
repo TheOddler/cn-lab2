@@ -4,13 +4,16 @@ import java.net.Socket;
 
 public class HEADHandler extends Handler {
 
+	public HEADHandler(Client client, URI uri) {
+		super(client, uri);
+	}
+
 	@Override
-	public Response handle(Socket socket) {
-		GETHandler g = new GETHandler(socket);
-		Response r = g.handle(socket);
-		
-			
-		return null;
+	public Response handle() {
+		GETHandler g = new GETHandler(getClient(),getUri());
+		Response r = g.handle();
+		Response head = new Response(r.getHeader(),"");
+		return head;
 	}
 
 }
