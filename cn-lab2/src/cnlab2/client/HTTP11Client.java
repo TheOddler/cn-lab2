@@ -24,7 +24,7 @@ public class HTTP11Client extends Client{
 		case "HEAD":
 			return new HEADHandler(this, uri);
 		case "POST":
-			return new PostHandler(this, uri);
+			return new POSTHandler(this, uri);
 		case "OPTIONS":
 		case "PUT":
 		case "DELETE":

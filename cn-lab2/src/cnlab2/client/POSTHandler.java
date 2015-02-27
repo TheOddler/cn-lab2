@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 import cnlab2.common.Response;
 
-public class PostHandler extends Handler {
+public class POSTHandler extends Handler {
 
-	public PostHandler(Client client, URI uri) {
+	public POSTHandler(Client client, URI uri) {
 		super(client, uri);
 	}
 

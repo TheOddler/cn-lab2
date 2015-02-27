@@ -23,7 +23,7 @@ public class HTTP10Client extends Client {
 		case "HEAD":
 			return new HEADHandler(this, uri);
 		case "POST":
-			return new PostHandler(this, uri);
+			return new POSTHandler(this, uri);
 		default:
 			throw new IllegalArgumentException("Unknown command");
 		}
