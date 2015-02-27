@@ -1,9 +1,15 @@
 package cnlab2.client;
 
 import java.net.Socket;
+<<<<<<< HEAD
+
+public abstract class Handler {
+	public abstract void handle(Socket socket);
+=======
 
 public abstract class Handler {
 
 	
 	public abstract String handle(Socket socket);
+>>>>>>> handler stuff
 }
