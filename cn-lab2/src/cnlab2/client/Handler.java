@@ -18,8 +18,15 @@ public abstract class Handler {
 		setClient(client);
 		setUri(uri);
 	}
-
-	public abstract Response handle() throws UnknownHostException, IOException;
+	
+	public abstract String getCommand();
+	public Response handle() throws UnknownHostException, IOException {
+		Socket socket = getClient().getSocketFor(getUri());
+		
+		sendString(socket, getRequestString(getCommand()));
+		
+		return getResponse(socket);
+	}
 	
 	public String getRequestString(String command) {
 		StringBuilder requestBuilder = new StringBuilder();

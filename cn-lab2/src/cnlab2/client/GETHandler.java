@@ -1,11 +1,5 @@
 package cnlab2.client;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
-import cnlab2.common.Response;
-
 public class GETHandler extends Handler {
 	
 	public GETHandler(Client client, URI uri) {
@@ -13,12 +7,8 @@ public class GETHandler extends Handler {
 	}
 	
 	@Override
-	public Response handle() throws UnknownHostException, IOException {
-		Socket socket = getClient().getSocketFor(getUri());
-		
-		sendString(socket, getRequestString("GET"));
-		
-		return getResponse(socket);
+	public String getCommand() {
+		return "GET";
 	}
 	
 }

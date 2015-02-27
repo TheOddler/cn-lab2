@@ -14,8 +14,13 @@ public class POSTHandler extends Handler {
 	}
 
 	@Override
+	public String getCommand() {
+		return "POST";
+	}
+	
+	@Override
 	public Response handle() throws UnknownHostException, IOException {
-		String r = getRequestString("POST");
+		String r = getRequestString(getCommand());
 		
 		Socket socket = getClient().getSocketFor(getUri());
 		
