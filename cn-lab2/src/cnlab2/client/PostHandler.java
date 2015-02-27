@@ -1,5 +1,8 @@
 package cnlab2.client;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class PostHandler extends Handler {
@@ -9,16 +12,11 @@ public class PostHandler extends Handler {
 	}
 
 	@Override
-	public Response handle() {
-		StringBuilder requestBuilder = new StringBuilder();
-		requestBuilder.append("POST");
-		requestBuilder.append(" ");
-		requestBuilder.append(getUri().getResource());
-		requestBuilder.append(" ");
-		requestBuilder.append(getClient().getVersion());
-		requestBuilder.append("\n");
-		String requestStr = requestBuilder.toString();
-
+	public Response handle() throws UnknownHostException, IOException {
+		String r = getRequestString("POST");
+		
+		Socket socket = getClient().getSocketFor(getUri(), 80);
+		
 		Scanner sc = new Scanner(System.in);
 		StringBuilder contentBuilder = new StringBuilder();
 		String previous = "";
@@ -30,6 +28,8 @@ public class PostHandler extends Handler {
 			contentBuilder.append(current + "\n");
 			previous = current;
 		}
+		
+		sendString(socket, r);
 		
 		Response result = new Response(contentBuilder.toString());
 		return result;
