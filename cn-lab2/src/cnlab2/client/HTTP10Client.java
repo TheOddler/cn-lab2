@@ -75,4 +75,10 @@ public class HTTP10Client extends Client {
 	public Socket getSocketFor(URI uri, int port) throws UnknownHostException, IOException {
 		return new Socket(uri.getHost(), port);
 	}
+
+	@Override
+	public String getVersion() {
+		return "HTTP/1.0";
+	}
+	
 }

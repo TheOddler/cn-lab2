@@ -16,4 +16,9 @@ public class HTTP11Client extends Client{
 		// Dummy needs proper implementation.
 	}
 
+	@Override
+	public String getVersion() {
+		return "HTTP/1.1";
+	}
+
 }
