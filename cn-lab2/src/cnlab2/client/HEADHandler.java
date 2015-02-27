@@ -10,9 +10,9 @@ public class HEADHandler extends Handler {
 
 	@Override
 	public Response handle() {
-		GETHandler g = new GETHandler(getClient(),getUri());
+		GETHandler g = new GETHandler();
 		Response r = g.handle();
-		Response head = new Response(r.getHeader(),"");
+		Response head = new Response(r.getHeader());
 		return head;
 	}
 
