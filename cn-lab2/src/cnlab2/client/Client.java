@@ -31,7 +31,7 @@ public abstract class Client {
 		
 	}
 	
+	public abstract Handler getHandlerFor(String command, URI uri);
 	public abstract Socket getSocketFor(URI uri) throws UnknownHostException, IOException;
-	
 	public abstract String getVersion();
 }

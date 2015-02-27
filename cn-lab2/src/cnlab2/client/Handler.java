@@ -41,6 +41,7 @@ public abstract class Handler {
 			String next = inFromServer.readLine();
 			if (next == null) break;
 			responseBuilder.append(next);
+			responseBuilder.append("\n");
 		}
 
 		return new Response(responseBuilder.toString());

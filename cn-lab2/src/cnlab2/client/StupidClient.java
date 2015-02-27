@@ -1,5 +1,7 @@
 package cnlab2.client;
 
+import cnlab2.common.Response;
+
 public abstract class StupidClient {
 
 	public static void main(String[] args) throws Exception {
@@ -7,12 +9,12 @@ public abstract class StupidClient {
 		if (args.length != 4) {
 			System.out.println("Usage: Command Uri Port Version");
 		}
-
-		HTTPCommand command = HTTPCommand.parseCommand(args[INDEX_COMMAND]);
+		
+		String command = args[INDEX_COMMAND];
 		int port = Integer.parseInt(args[INDEX_PORT]);
 		URI uri = new URI(args[INDEX_URI], port);
-		
 		String version = args[INDEX_VERSION];
+		
 		Client client = null;
 		if (version.equals("1.0")) {
 			client = new HTTP10Client();
@@ -22,8 +24,10 @@ public abstract class StupidClient {
 			throw new IllegalAccessException("Invalid version: " + version);
 		}
 		
-		client.handle(command, uri, port);
-
+		Handler handler = client.getHandlerFor(command, uri);
+		Response response = handler.handle();
+		
+		System.out.println(response.getContent());
 	}
 	
 	private static final int INDEX_COMMAND = 0;
