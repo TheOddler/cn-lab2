@@ -1,13 +1,13 @@
 package cnlab2.common;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Response {
 	private String version;
 	private int status;
 	private String message;
-	private final Map<String, String> headerMap = new HashMap<String, String>();
+	private final Map<String, String> headerMap = new LinkedHashMap<String, String>();
 
 	private String content;
 
@@ -38,7 +38,6 @@ public class Response {
 		StringBuilder valueBuilder = null;
 		while (currentLineIndex < lines.length) {
 			line = lines[currentLineIndex];
-			System.out.println(line);
 			if (line.equals("")) {
 				currentLineIndex++;
 				break;
@@ -46,12 +45,12 @@ public class Response {
 			if (readyForKey) {
 				int collumnIndex = line.indexOf(":");
 				key = line.substring(0, collumnIndex);
-				line = line.substring(collumnIndex);
+				line = line.substring(collumnIndex + ":".length());
 				readyForKey = false;
 
 				valueBuilder = new StringBuilder();
 			}
-			valueBuilder.append(line);
+			valueBuilder.append(line.trim());
 			if (!line.endsWith(",")) {
 				addHeaderField(key, valueBuilder.toString());
 				readyForKey = true;
@@ -62,6 +61,9 @@ public class Response {
 		StringBuilder contentBuilder = new StringBuilder();
 		for (; currentLineIndex < lines.length; currentLineIndex++) {
 			contentBuilder.append(lines[currentLineIndex]);
+			if (currentLineIndex != lines.length - 1)
+				contentBuilder.append("\n");
+
 		}
 		setContent(contentBuilder.toString());
 
@@ -74,6 +76,7 @@ public class Response {
 		headerBuilder.append(getStatus());
 		headerBuilder.append(" ");
 		headerBuilder.append(getMessage());
+		headerBuilder.append("\n");
 		for (String key : headerMap.keySet()) {
 			headerBuilder.append(key);
 			headerBuilder.append(": ");
@@ -85,7 +88,7 @@ public class Response {
 	}
 
 	public String toString() {
-		return getHeader() + "\n\n" + getContent();
+		return getHeader() + "\n" + getContent();
 	}
 
 	private void setContent(String content) {
