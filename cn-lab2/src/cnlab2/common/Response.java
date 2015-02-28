@@ -61,10 +61,10 @@ public class Response {
 		StringBuilder contentBuilder = new StringBuilder();
 		for (; currentLineIndex < lines.length; currentLineIndex++) {
 			contentBuilder.append(lines[currentLineIndex]);
-			if (currentLineIndex != lines.length - 1)
-				contentBuilder.append("\n");
-
+			contentBuilder.append("\n");
 		}
+		if (contentBuilder.toString().equals(""))
+			contentBuilder.append("\n");
 		setContent(contentBuilder.toString());
 
 	}
@@ -88,7 +88,7 @@ public class Response {
 	}
 
 	public String toString() {
-		return getHeader() + "\n" + getContent();
+		return getHeader() + "\n" + getContent() + "\n";
 	}
 
 	private void setContent(String content) {

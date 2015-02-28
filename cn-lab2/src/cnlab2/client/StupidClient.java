@@ -27,7 +27,7 @@ public abstract class StupidClient {
 		Handler handler = client.getHandlerFor(command, uri);
 		Response response = handler.handle();
 		
-		System.out.println(response.getContent());
+		System.out.print(response.toString());
 	}
 	
 	private static final int INDEX_COMMAND = 0;
