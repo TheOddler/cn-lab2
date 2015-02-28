@@ -1,5 +1,7 @@
 package cnlab2.common;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -10,6 +12,10 @@ public class Response {
 	private final Map<String, String> headerMap = new LinkedHashMap<String, String>();
 	private String content;
 
+	private Response() {
+		
+	}
+	
 	public Response(String response) {
 		parseResponse(response);
 	}
@@ -19,6 +25,84 @@ public class Response {
 		setStatus(status);
 		setMessage(message);
 		setContent(content);
+	}
+	
+	public static Response ReadFirstResponse(BufferedReader inFromServer) throws IOException {
+		Response resp = new Response();
+		
+		
+		
+		String statusLine = inFromServer.readLine(); // lines[0]
+
+		int firstSpace = statusLine.indexOf(" ");
+		String version = statusLine.substring(0, firstSpace);
+		int secondSpace = statusLine.indexOf(" ", firstSpace + " ".length());
+		String statusCodeStr = statusLine.substring(firstSpace + " ".length(),
+				secondSpace);
+		String statusMessageStr = statusLine.substring(secondSpace
+				+ " ".length());
+
+		resp.setVersion(version);
+		resp.setStatus(Integer.parseInt(statusCodeStr));
+		resp.setMessage(statusMessageStr);
+
+		String line;
+		boolean readyForKey = true;
+		//int currentLineIndex = 1;
+		String key = null;
+		StringBuilder valueBuilder = null;
+		while (true /*currentLineIndex < lines.length*/) {
+			line = inFromServer.readLine(); // lines[currentLineIndex];
+			
+			if (line == null || line.equals("")) {
+				//currentLineIndex++;
+				break;
+			}
+			if (readyForKey) {
+				int collumnIndex = line.indexOf(":");
+				key = line.substring(0, collumnIndex);
+				line = line.substring(collumnIndex + ":".length());
+				readyForKey = false;
+
+				valueBuilder = new StringBuilder();
+			}
+			valueBuilder.append(line.trim());
+			if (!line.endsWith(",")) {
+				resp.addHeaderField(key, valueBuilder.toString());
+				readyForKey = true;
+			}
+			//currentLineIndex++;
+		}
+
+		StringBuilder contentBuilder = new StringBuilder();
+		/*for (; currentLineIndex < lines.length; currentLineIndex++) {
+			contentBuilder.append(lines[currentLineIndex]);
+			contentBuilder.append("\n");
+		}*/
+		int totalRead = 0;
+		if (resp.getHeaderMap().containsKey("Content-Length")) {
+			int length = Integer.parseInt(resp.getHeaderMap().get("Content-Length"));
+			while (totalRead < length) {
+				line = inFromServer.readLine();
+				if (line == null) break;
+				
+				contentBuilder.append(line);
+				contentBuilder.append("\n");
+				
+				totalRead += line.length();
+				totalRead += 1; //the newline character
+			}
+		}
+		System.out.println("totalRead: " + totalRead);
+		
+		if (contentBuilder.toString().equals(""))
+			contentBuilder.append("\n");
+		resp.setContent(contentBuilder.toString());
+		
+		
+		
+		
+		return resp;
 	}
 
 	private void parseResponse(String response) {

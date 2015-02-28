@@ -9,7 +9,7 @@ public abstract class Client {
 	public Client() {
 	}
 	
-	public abstract Handler getHandlerFor(String command, URI uri);
+	public abstract void handle(String command, URI uri) throws UnknownHostException, IOException;
 	public abstract Socket getSocketFor(URI uri) throws UnknownHostException, IOException;
 	public abstract String getVersion();
 }

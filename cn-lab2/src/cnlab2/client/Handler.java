@@ -14,27 +14,42 @@ public abstract class Handler {
 
 	private Client client;
 	private URI uri;
+	private Socket socket;
 
-	public Handler(Client client, URI uri) {
+	public Handler(Client client, URI uri) throws UnknownHostException, IOException {
 		setClient(client);
 		setUri(uri);
+		
+		socket = getClient().getSocketFor(getUri());
 	}
 	
 	public abstract String getCommand();
-	public Response handle() throws UnknownHostException, IOException {
-		Socket socket = getClient().getSocketFor(getUri());
-		
+	
+	public void send() throws IOException {
 		Request request = new Request(getCommand(), getUri(), client.getVersion(), "");
 		sendRequest(socket,request);
 		
+		System.out.println(request);
+	}
+	
+	protected void sendRequest(Socket socket, Request req) throws IOException {
+		DataOutputStream outToServer;
+		outToServer = new DataOutputStream(socket.getOutputStream());
+		outToServer.writeBytes(req.toString());
+	}
+	
+	public Response receive() throws IOException {
 		return getResponse(socket);
 	}
 	
-	public Response getResponse(Socket socket) throws IOException {
-		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
-				socket.getInputStream()));
+	protected Response getResponse(Socket socket) throws IOException {
+		BufferedReader inFromServer = new BufferedReader(
+			new InputStreamReader(
+					socket.getInputStream()
+				)
+			);
 
-		StringBuilder responseBuilder = new StringBuilder();
+		/*StringBuilder responseBuilder = new StringBuilder();
 		while (true) {
 			String next = inFromServer.readLine();
 			if (next == null) break;
@@ -42,16 +57,13 @@ public abstract class Handler {
 			responseBuilder.append("\n");
 		}
 
-		return new Response(responseBuilder.toString());
+		return new Response(responseBuilder.toString());*/
+		
+		return Response.ReadFirstResponse(inFromServer);
 	}
-
-	public void sendRequest(Socket socket, Request req) throws IOException {
-		DataOutputStream outToServer;
-		outToServer = new DataOutputStream(socket.getOutputStream());
-		outToServer.writeBytes(req.toString());
-
-	}
-
+	
+	
+	
 	public Client getClient() {
 		return client;
 	}

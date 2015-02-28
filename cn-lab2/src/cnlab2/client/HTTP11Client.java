@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import cnlab2.common.Response;
+
 
 public class HTTP11Client extends Client{
 
@@ -17,18 +19,25 @@ public class HTTP11Client extends Client{
 	}
 	
 	@Override
-	public Handler getHandlerFor(String command, URI uri) {
+	public void handle(String command, URI uri) throws UnknownHostException, IOException {
+		Handler handler;
+		
 		switch (command) {
 		case "GET":
-			return new GETHandler(this, uri);
+			handler =  new GETHandler(this, uri);
+			break;
 		case "HEAD":
-			return new HEADHandler(this, uri);
+			handler =  new HEADHandler(this, uri);
+			break;
 		case "POST":
-			return new POSTHandler(this, uri);
+			handler =  new POSTHandler(this, uri);
+			break;
 		case "TRACE":
-			return new TRACEHandler(this, uri);
+			handler =  new TRACEHandler(this, uri);
+			break;
 		case "OPTIONS":
-			return new OPTIONSHandler(this, uri);
+			handler =  new OPTIONSHandler(this, uri);
+			break;
 		case "PUT":
 		case "DELETE":
 		case "CONNECT":
@@ -36,6 +45,16 @@ public class HTTP11Client extends Client{
 		default:
 			throw new IllegalArgumentException("Unknown command");
 		}
+		
+		//TODO Pipelining
+		handler.send();
+		handler.send();
+		
+		Response response = handler.receive();
+		System.out.print(response);
+		
+		Response response2 = handler.receive();
+		System.out.print(response2);
 	}
 
 	@Override

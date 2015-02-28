@@ -13,6 +13,7 @@ public abstract class StupidClient {
 		String command = args[INDEX_COMMAND];
 		int port = Integer.parseInt(args[INDEX_PORT]);
 		URI uri = new URI(args[INDEX_URI], port);
+		
 		String version = args[INDEX_VERSION];
 		
 		Client client = null;
@@ -24,10 +25,7 @@ public abstract class StupidClient {
 			throw new IllegalAccessException("Invalid version: " + version);
 		}
 		
-		Handler handler = client.getHandlerFor(command, uri);
-		Response response = handler.handle();
-		
-		System.out.print(response.toString());
+		client.handle(command, uri);
 	}
 	
 	private static final int INDEX_COMMAND = 0;

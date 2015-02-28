@@ -6,11 +6,10 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import cnlab2.common.Request;
-import cnlab2.common.Response;
 
 public class POSTHandler extends Handler {
 
-	public POSTHandler(Client client, URI uri) {
+	public POSTHandler(Client client, URI uri) throws UnknownHostException, IOException {
 		super(client, uri);
 	}
 
@@ -20,7 +19,7 @@ public class POSTHandler extends Handler {
 	}
 	
 	@Override
-	public Response handle() throws UnknownHostException, IOException {
+	public void send() throws IOException {
 		
 		Socket socket = getClient().getSocketFor(getUri());
 		
@@ -42,10 +41,6 @@ public class POSTHandler extends Handler {
 		sendRequest(socket, r);
 		
 		sc.close();
-		
-		// FIXME finish this
-		Response result = new Response("");
-		return result;
 	}
 
 }

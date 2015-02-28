@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class HTTP10Client extends Client {
+import cnlab2.common.Response;
 
+public class HTTP10Client extends Client {
+	
 	public HTTP10Client() {
 		super();
 	}
@@ -16,17 +18,27 @@ public class HTTP10Client extends Client {
 	}
 
 	@Override
-	public Handler getHandlerFor(String command, URI uri) {
+	public void handle(String command, URI uri) throws UnknownHostException, IOException {
+		Handler handler;
+		
 		switch (command) {
 		case "GET":
-			return new GETHandler(this, uri);
+			handler = new GETHandler(this, uri);
+			break;
 		case "HEAD":
-			return new HEADHandler(this, uri);
+			handler = new HEADHandler(this, uri);
+			break;
 		case "POST":
-			return new POSTHandler(this, uri);
+			handler = new POSTHandler(this, uri);
+			break;
 		default:
 			throw new IllegalArgumentException("Unknown command");
 		}
+		
+		handler.send();
+		Response response = handler.receive();
+		
+		System.out.print(response);
 	}
 
 	@Override

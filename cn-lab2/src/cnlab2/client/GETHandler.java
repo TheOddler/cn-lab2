@@ -1,8 +1,11 @@
 package cnlab2.client;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
 public class GETHandler extends Handler {
 	
-	public GETHandler(Client client, URI uri) {
+	public GETHandler(Client client, URI uri) throws UnknownHostException, IOException {
 		super(client, uri);
 	}
 	
