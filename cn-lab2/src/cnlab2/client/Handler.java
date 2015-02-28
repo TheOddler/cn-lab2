@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import cnlab2.common.Request;
 import cnlab2.common.Response;
 
 public abstract class Handler {
@@ -23,22 +24,12 @@ public abstract class Handler {
 	public Response handle() throws UnknownHostException, IOException {
 		Socket socket = getClient().getSocketFor(getUri());
 		
-		sendString(socket, getRequestString(getCommand()));
+		Request request = new Request(getCommand(), getUri(), client.getVersion(), "");
+		sendRequest(socket,request);
 		
 		return getResponse(socket);
 	}
 	
-	public String getRequestString(String command) {
-		StringBuilder requestBuilder = new StringBuilder();
-		requestBuilder.append(command);
-		requestBuilder.append(" ");
-		requestBuilder.append(getUri().getResource());
-		requestBuilder.append(" ");
-		requestBuilder.append(getClient().getVersion());
-		requestBuilder.append("\n\n");
-		return requestBuilder.toString();
-	}
-
 	public Response getResponse(Socket socket) throws IOException {
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
 				socket.getInputStream()));
@@ -54,10 +45,10 @@ public abstract class Handler {
 		return new Response(responseBuilder.toString());
 	}
 
-	public void sendString(Socket socket, String str) throws IOException {
+	public void sendRequest(Socket socket, Request req) throws IOException {
 		DataOutputStream outToServer;
 		outToServer = new DataOutputStream(socket.getOutputStream());
-		outToServer.writeBytes(str);
+		outToServer.writeBytes(req.toString());
 
 	}
 
