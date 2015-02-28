@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import cnlab2.common.URI;
+
 public abstract class Client {
 
 	public Client() {

@@ -1,6 +1,7 @@
 package cnlab2.client;
 
 import cnlab2.common.Response;
+import cnlab2.common.URI;
 
 public abstract class StupidClient {
 

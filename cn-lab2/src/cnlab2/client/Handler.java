@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 
 import cnlab2.common.Request;
 import cnlab2.common.Response;
+import cnlab2.common.URI;
 
 public abstract class Handler {
 
@@ -48,7 +49,7 @@ public abstract class Handler {
 				)
 			);
 		
-		return Response.ReadFirstResponse(inFromServer);
+		return new Response(inFromServer);
 	}
 	
 	

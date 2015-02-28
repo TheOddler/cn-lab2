@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import cnlab2.common.Response;
+import cnlab2.common.URI;
 
 
 public class HTTP11Client extends Client{

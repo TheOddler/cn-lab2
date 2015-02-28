@@ -1,10 +1,19 @@
-package cnlab2.client;
+package cnlab2.common;
 
 public class URI {
 	private String protocol;
 	private String host;
 	private String resource;
 	private int port;
+	
+	public URI(String protocol, String host, String resource){
+		setProtocol(protocol);
+		setHost(host);
+		setResource(resource);
+	}
+	public URI(String host, String resource){
+		this(DEFAULT_PROTOCOL,host,resource);
+	}
 
 	public URI(String uriStr, int port) throws IllegalAccessException {
 		if (uriStr == null) {
@@ -67,4 +76,5 @@ public class URI {
 	}
 
 	private static final String DEFAULT_RESOURCE = "/index.html";
+	private static final String DEFAULT_PROTOCOL = "http";
 }

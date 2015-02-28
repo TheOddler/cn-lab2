@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import cnlab2.common.Request;
+import cnlab2.common.URI;
 
 public class POSTHandler extends Handler {
 
