@@ -8,11 +8,17 @@ public class Response {
 	private int status;
 	private String message;
 	private final Map<String, String> headerMap = new LinkedHashMap<String, String>();
-
 	private String content;
 
 	public Response(String response) {
 		parseResponse(response);
+	}
+	
+	public Response(String version, int status, String message, String content){
+		setVersion(version);
+		setStatus(status);
+		setMessage(message);
+		setContent(content);
 	}
 
 	private void parseResponse(String response) {
@@ -127,7 +133,7 @@ public class Response {
 		return this.headerMap;
 	}
 
-	private void addHeaderField(String key, String value) {
+	public void addHeaderField(String key, String value) {
 		this.headerMap.put(key, value);
 	}
 }
