@@ -1,5 +1,10 @@
 package cnlab2.common;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import cnlab2.client.URI;
 
 public class Request {
@@ -7,6 +12,7 @@ public class Request {
 	private String command;
 	private URI uri;
 	private String version;
+	private final Map<String, String> headerMap = new LinkedHashMap<String, String>();
 	private String content;
 
 	public Request(String command, URI uri, String version, String content){
@@ -14,6 +20,26 @@ public class Request {
 		setUri(uri);
 		setVersion(version);
 		setContent(content);
+	}
+	
+	public static Request buildRequest(BufferedReader reader) throws IOException{
+		String statusLine = reader.readLine();
+
+		int firstSpace = statusLine.indexOf(" ");
+		String command = statusLine.substring(0, firstSpace);
+		int secondSpace = statusLine.indexOf(" ", firstSpace + " ".length());
+		String resourceStr = statusLine.substring(firstSpace + " ".length(),
+				secondSpace);
+		String versionStr = statusLine.substring(secondSpace
+				+ " ".length());
+		
+		
+		//FIXME
+		URI uri = null;
+		String content = null;
+		
+		Request r = new Request(command, uri, versionStr, content);
+		return r;
 	}
 	
 	@Override
@@ -71,6 +97,13 @@ public class Request {
 	private void setContent(String content) {
 		this.content = content;
 	}
-	
+
+	public Map<String, String> getHeaderMap() {
+		return this.headerMap;
+	}
+
+	public void addHeaderField(String key, String value) {
+		this.headerMap.put(key, value);
+	}
 	
 }
