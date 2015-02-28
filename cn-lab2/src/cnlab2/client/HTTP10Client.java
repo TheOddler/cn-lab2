@@ -1,7 +1,6 @@
 package cnlab2.client;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 import cnlab2.common.Response;
@@ -14,8 +13,8 @@ public class HTTP10Client extends Client {
 	}
 
 	@Override
-	public Socket getSocketFor(URI uri) throws UnknownHostException, IOException {
-		return new Socket(uri.getHost(), uri.getPort());
+	public SmartSocket getSmartSocketFor(URI uri) throws UnknownHostException, IOException {
+		return new SmartSocket(uri);
 	}
 
 	@Override

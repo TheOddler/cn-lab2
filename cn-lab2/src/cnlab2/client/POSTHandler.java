@@ -1,7 +1,6 @@
 package cnlab2.client;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
@@ -22,8 +21,6 @@ public class POSTHandler extends Handler {
 	@Override
 	public void send() throws IOException {
 		
-		Socket socket = getClient().getSocketFor(getUri());
-		
 		Scanner sc = new Scanner(System.in);
 		StringBuilder contentBuilder = new StringBuilder();
 		String previous = "";
@@ -39,7 +36,8 @@ public class POSTHandler extends Handler {
 		
 		Request r = new Request(getCommand(),getUri(),getClient().getVersion(),content);
 		
-		sendRequest(socket, r);
+        SmartSocket smartSocket = getClient().getSmartSocketFor(getUri());
+		sendRequest(smartSocket, r);
 		
 		sc.close();
 	}

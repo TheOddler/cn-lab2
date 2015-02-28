@@ -1,8 +1,9 @@
 package cnlab2.client;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cnlab2.common.Response;
 import cnlab2.common.URI;
@@ -10,13 +11,34 @@ import cnlab2.common.URI;
 
 public class HTTP11Client extends Client{
 
+    private final List<SmartSocket> knownSockets = new ArrayList<SmartSocket>();
+    
 	public HTTP11Client() {
 		super();
 	}
 	
-	public Socket getSocketFor(URI uri) throws UnknownHostException, IOException {
-		return new Socket(uri.getHost(), uri.getPort());
-		// Dummy needs proper implementation.
+	public SmartSocket getSmartSocketFor(URI uri) throws UnknownHostException, IOException {
+	    // check if we already made a smart socket for this uri
+	    for (SmartSocket socket: knownSockets) {
+	        // see if this socket can be used for this uri
+	        if (socket.canBeUsedFor(uri)) {
+	            // check if the found socket is still open
+	            if (socket.getSocket().isClosed()) {
+	                // if not, remove it and break out of loop
+	                // after the loop a new one will be made.
+	                knownSockets.remove(socket);
+	                break;
+	            }
+	            else {
+	                // if it's open, return it.
+	                return socket;
+	            }
+	        }
+	    }
+	    
+	    SmartSocket newSocket = new SmartSocket(uri);
+	    knownSockets.add(newSocket);
+	    return newSocket;
 	}
 	
 	@Override
@@ -48,16 +70,20 @@ public class HTTP11Client extends Client{
 		}
 		
 		//TODO Pipelining
-		handler.send();
+        handler.send();
+        handler.send();
 		
-		Handler secondHandler = new GETHandler(this, uri);
+		Handler secondHandler = new HEADHandler(this, uri);
 		secondHandler.send();
 		
 		Response response = handler.receive();
 		System.out.print("Eerste: " + response);
 		
-		Response response2 = secondHandler.receive();
-		System.out.print("Tweede: " + response2);
+        Response response2 = handler.receive();
+        System.out.print("Eerste: " + response2);
+		
+		Response secondResponse = secondHandler.receive();
+		System.out.print("Tweede: " + secondResponse);
 	}
 
 	@Override
