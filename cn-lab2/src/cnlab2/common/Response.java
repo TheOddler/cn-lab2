@@ -30,9 +30,13 @@ public class Response {
 	public static Response ReadFirstResponse(BufferedReader inFromServer) throws IOException {
 		Response resp = new Response();
 		
-		
+		System.out.println("Start reading...");
 		
 		String statusLine = inFromServer.readLine(); // lines[0]
+		
+		if (statusLine == null) {
+		    System.out.println("No more lines: " + inFromServer);
+		}
 
 		int firstSpace = statusLine.indexOf(" ");
 		String version = statusLine.substring(0, firstSpace);

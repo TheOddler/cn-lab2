@@ -48,13 +48,15 @@ public class HTTP11Client extends Client{
 		
 		//TODO Pipelining
 		handler.send();
-		handler.send();
+		
+		Handler secondHandler = new GETHandler(this, uri);
+		secondHandler.send();
 		
 		Response response = handler.receive();
-		System.out.print(response);
+		System.out.print("Eerste: " + response);
 		
-		Response response2 = handler.receive();
-		System.out.print(response2);
+		Response response2 = secondHandler.receive();
+		System.out.print("Tweede: " + response2);
 	}
 
 	@Override

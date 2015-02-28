@@ -33,8 +33,7 @@ public abstract class Handler {
 	}
 	
 	protected void sendRequest(Socket socket, Request req) throws IOException {
-		DataOutputStream outToServer;
-		outToServer = new DataOutputStream(socket.getOutputStream());
+		DataOutputStream outToServer = new DataOutputStream(this.socket.getOutputStream());
 		outToServer.writeBytes(req.toString());
 	}
 	
@@ -45,19 +44,9 @@ public abstract class Handler {
 	protected Response getResponse(Socket socket) throws IOException {
 		BufferedReader inFromServer = new BufferedReader(
 			new InputStreamReader(
-					socket.getInputStream()
+					this.socket.getInputStream()
 				)
 			);
-
-		/*StringBuilder responseBuilder = new StringBuilder();
-		while (true) {
-			String next = inFromServer.readLine();
-			if (next == null) break;
-			responseBuilder.append(next);
-			responseBuilder.append("\n");
-		}
-
-		return new Response(responseBuilder.toString());*/
 		
 		return Response.ReadFirstResponse(inFromServer);
 	}
