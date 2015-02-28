@@ -16,13 +16,6 @@ public class Response {
 	}
 
 	private void parseResponse(String response) {
-		/*
-		 * HTTP/1.0 200 OK Date: Fri, 31 Dec 1999 23:59:59 GMT Content-Type:
-		 * text/html Content-Length: 1354
-		 * 
-		 * <html> <body> <h1>Happy New Millennium!</h1> (more file contents) . .
-		 * . </body> </html>
-		 */
 		String lines[] = response.split("\\r?\\n");
 		String statusLine = lines[0];
 
@@ -42,10 +35,14 @@ public class Response {
 		boolean readyForKey = true;
 		int currentLineIndex = 1;
 		String key = null;
-		;
 		StringBuilder valueBuilder = null;
 		while (currentLineIndex < lines.length) {
 			line = lines[currentLineIndex];
+			System.out.println(line);
+			if (line.equals("")) {
+				currentLineIndex++;
+				break;
+			}
 			if (readyForKey) {
 				int collumnIndex = line.indexOf(":");
 				key = line.substring(0, collumnIndex);
@@ -59,8 +56,14 @@ public class Response {
 				addHeaderField(key, valueBuilder.toString());
 				readyForKey = true;
 			}
-
+			currentLineIndex++;
 		}
+
+		StringBuilder contentBuilder = new StringBuilder();
+		for (; currentLineIndex < lines.length; currentLineIndex++) {
+			contentBuilder.append(lines[currentLineIndex]);
+		}
+		setContent(contentBuilder.toString());
 
 	}
 
@@ -79,6 +82,14 @@ public class Response {
 		}
 		return headerBuilder.toString();
 
+	}
+
+	public String toString() {
+		return getHeader() + "\n\n" + getContent();
+	}
+
+	private void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getContent() {
