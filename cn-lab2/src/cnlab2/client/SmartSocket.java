@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import cnlab2.common.URI;
 
@@ -19,12 +20,18 @@ public class SmartSocket {
     public SmartSocket(URI uri) throws IOException {
         this.creationUri = uri;
         
-        this.setSocket( new Socket(this.creationUri.getHost(), this.creationUri.getPort()) );
-        
-        setIn(new BufferedReader(
-                new InputStreamReader(this.getSocket().getInputStream()) ));
-        
-        this.setOut( new DataOutputStream(this.getSocket().getOutputStream()) );
+        RefreshIfNeeded();
+    }
+    
+    public void RefreshIfNeeded() throws UnknownHostException, IOException {
+        if (socket == null || socket.isClosed()) {
+            this.setSocket( new Socket(this.creationUri.getHost(), this.creationUri.getPort()) );
+            
+            setIn(new BufferedReader(
+                    new InputStreamReader(this.getSocket().getInputStream()) ));
+            
+            this.setOut( new DataOutputStream(this.getSocket().getOutputStream()) );
+        }
     }
     
     public boolean canBeUsedFor(URI uri) {

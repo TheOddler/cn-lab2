@@ -22,17 +22,10 @@ public class HTTP11Client extends Client{
 	    for (SmartSocket socket: knownSockets) {
 	        // see if this socket can be used for this uri
 	        if (socket.canBeUsedFor(uri)) {
-	            // check if the found socket is still open
-	            if (socket.getSocket().isClosed()) {
-	                // if not, remove it and break out of loop
-	                // after the loop a new one will be made.
-	                knownSockets.remove(socket);
-	                break;
-	            }
-	            else {
-	                // if it's open, return it.
-	                return socket;
-	            }
+	            // refresh smartsocket, reopening it if it was closed
+                socket.RefreshIfNeeded();
+                // if it's open, return it.
+                return socket;
 	        }
 	    }
 	    
@@ -70,20 +63,26 @@ public class HTTP11Client extends Client{
 		}
 		
 		//TODO Pipelining
-        handler.send();
-        handler.send();
-		
-		Handler secondHandler = new HEADHandler(this, uri);
-		secondHandler.send();
-		
-		Response response = handler.receive();
-		System.out.print("Eerste: " + response);
-		
-        Response response2 = handler.receive();
-        System.out.print("Eerste: " + response2);
-		
-		Response secondResponse = secondHandler.receive();
-		System.out.print("Tweede: " + secondResponse);
+		try {
+    		handler.send();
+            handler.send();
+    		
+    		Handler secondHandler;
+            
+            secondHandler = new HEADHandler(this, new URI("http://www.google.be/?gfe_rd=cr&ei=BTnyVLiwF4WeOsCRgcgH", 80));
+            secondHandler.send();
+            
+            Response response = handler.receive();
+            System.out.print("Eerste: " + response);
+            
+            Response response2 = handler.receive();
+            System.out.print("Eerste nog eens: " + response2);
+            
+            Response secondResponse = secondHandler.receive();
+            System.out.print("Tweede: " + secondResponse);
+        } catch (Exception e) {
+            
+        }
 	}
 
 	@Override
