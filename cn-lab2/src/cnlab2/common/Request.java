@@ -24,8 +24,19 @@ public class Request {
 		requestBuilder.append(getUri().getResource());
 		requestBuilder.append(" ");
 		requestBuilder.append(getVersion());
+		requestBuilder.append("\n");
+		requestBuilder.append("Host: ");
+		requestBuilder.append(uri.getHost());
+		requestBuilder.append(":");
+		requestBuilder.append(uri.getPort());
+		
+		if(!content.isEmpty()) {
+			requestBuilder.append("\n\n"); //blank line between headers & content
+			requestBuilder.append(content);
+		}
+		
 		requestBuilder.append("\n\n");
-		requestBuilder.append(content);
+		
 		return requestBuilder.toString();
 	}
 
