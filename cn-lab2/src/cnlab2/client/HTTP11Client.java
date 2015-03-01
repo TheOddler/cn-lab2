@@ -80,6 +80,8 @@ public class HTTP11Client extends Client{
             handler =  new OPTIONSHandler(this, uri);
             break;
         case "PUT":
+            handler =  new PUTHandler(this, uri);
+            break;
         case "DELETE":
         case "CONNECT":
             throw new IllegalArgumentException("Command not yet implemented");

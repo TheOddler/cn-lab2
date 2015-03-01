@@ -20,25 +20,32 @@ public class POSTHandler extends Handler {
 	
 	@Override
 	public void send() throws IOException {
+	    
+	    Request request = new Request(getCommand(), getUri(), getClient().getVersion(), "");
+        request.getHeader().addHeaderField("Host", getUri().getHost() +":"+ getUri().getPort());
 		
-		Scanner sc = new Scanner(System.in);
+        System.out.println(getCommand() + ", please enter content: ");
+        
+		Scanner sc = new Scanner(System.in); // Do not close in case other Post handlers follow
 		StringBuilder contentBuilder = new StringBuilder();
 		String previous = "";
 		String current = "";
-		while (true) {
+		while (sc.hasNextLine()) {
 			current = sc.nextLine();
-			if (previous.equals("") && current.equals(""))
-				break;
-			contentBuilder.append(current + "\n");
+			if (previous.equals("") && current.equals("")) {
+			    break;
+			}
+			contentBuilder.append(current);
+			contentBuilder.append("\n");
 			previous = current;
 		}
-		String content = contentBuilder.toString();
 		
-		Request r = new Request(getCommand(),getUri(),getClient().getVersion(),content);
+		String content = contentBuilder.toString().trim();
 		
-		sendRequest(getSmartSocket(), r);
+		request.getHeader().addHeaderField("Content-Length", Integer.toString(content.length()));
+		request.setContent(content);
 		
-		sc.close();
+		sendRequest(getSmartSocket(), request);
 	}
 
 }

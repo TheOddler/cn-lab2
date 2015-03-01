@@ -34,7 +34,7 @@ public class HTTPMessage {
         return content;
     }
 
-    protected void setContent(String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

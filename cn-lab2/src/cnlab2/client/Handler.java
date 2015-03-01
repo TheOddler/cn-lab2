@@ -27,11 +27,10 @@ public abstract class Handler {
 		Request request = new Request(getCommand(), getUri(), client.getVersion(), "");
 		request.getHeader().addHeaderField("Host", uri.getHost() +":"+ uri.getPort());
 		sendRequest(getSmartSocket(), request);
-		
-		System.out.println(request);
 	}
 	
 	protected void sendRequest(SmartSocket smartSocket, Request req) throws IOException {
+	    System.out.println("Request (" + getCommand() + "):\n" + req + "\nEnd req");
 		smartSocket.getOut().writeBytes(req.toString());
 	}
 	
@@ -40,7 +39,11 @@ public abstract class Handler {
 	}
 	
 	protected Response getResponse(SmartSocket smartSocket) throws IOException {
-		return new Response(smartSocket.getIn());
+		Response resp = new Response(smartSocket.getIn());
+		
+		System.out.println("Response (" + getCommand() + "):\n" + resp + "\nEnd resp");
+		
+		return resp;
 	}
 	
 	

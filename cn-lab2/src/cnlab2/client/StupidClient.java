@@ -28,8 +28,12 @@ public abstract class StupidClient {
 			throw new IllegalAccessException("Invalid version: " + version);
 		}
 		
-		List<Response> responses = client.handle(new HTTPCommand(command, uri));
-		System.out.print(responses);
+		List<Response> responses = client.handle(
+		        new HTTPCommand(command, uri),
+		        new HTTPCommand("POST", uri)
+		    );
+		
+		// Do something with the responses
 	}
 	
 	private static final int INDEX_COMMAND = 0;
