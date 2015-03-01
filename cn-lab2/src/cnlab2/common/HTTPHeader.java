@@ -63,4 +63,13 @@ public abstract class HTTPHeader {
 	public void addHeaderField(String key, String value) {
 		this.headerMap.put(key, value);
 	}
+	
+	public String getHeaderField(String key) {
+	    if (headerMap.containsKey(key)) {
+	        return headerMap.get(key);
+	    }
+	    else {
+	        return "";
+	    }
+	}
 }
