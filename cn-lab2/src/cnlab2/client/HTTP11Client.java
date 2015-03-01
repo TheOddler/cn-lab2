@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cnlab2.common.Response;
+import cnlab2.common.SmartSocket;
 import cnlab2.common.URI;
 
 

@@ -1,4 +1,4 @@
-package cnlab2.client;
+package cnlab2.common;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
-import cnlab2.common.URI;
 
 public class SmartSocket {
     private URI creationUri;

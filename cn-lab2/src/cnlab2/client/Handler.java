@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 
 import cnlab2.common.Request;
 import cnlab2.common.Response;
+import cnlab2.common.SmartSocket;
 import cnlab2.common.URI;
 
 public abstract class Handler {
