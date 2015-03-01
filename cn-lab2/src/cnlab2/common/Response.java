@@ -14,6 +14,11 @@ public class Response extends HTTPMessage {
     public Response(String version, int status, String message, String content) {
         setHeader(new HTTPResponseHeader(message, status, version));
         setContent(content);
+        getHeader().addHeaderField("Content-Length", Integer.toString(getContentLength()));
+    }
+    
+    private int getContentLength() {
+        return getContent().length();
     }
     
     public String toString() {

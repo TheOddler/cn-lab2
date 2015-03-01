@@ -14,6 +14,12 @@ public class SmartSocket {
     private BufferedReader in;
     private DataOutputStream out;
     
+    public SmartSocket(Socket socket) throws IOException {
+        setSocket(socket);
+        setIn(new BufferedReader(new InputStreamReader(socket.getInputStream())));
+        setOut(new DataOutputStream(socket.getOutputStream()));
+    }
+    
     // only host and port is used of the URI, resource is ignored.
     public SmartSocket(URI uri) throws IOException {
         this.creationUri = uri;
@@ -23,40 +29,38 @@ public class SmartSocket {
     
     public void RefreshIfNeeded() throws UnknownHostException, IOException {
         if (socket == null || socket.isClosed()) {
-            this.setSocket( new Socket(this.creationUri.getHost(), this.creationUri.getPort()) );
+            this.setSocket(new Socket(this.creationUri.getHost(), this.creationUri.getPort()));
             
-            setIn(new BufferedReader(
-                    new InputStreamReader(this.getSocket().getInputStream()) ));
+            setIn(new BufferedReader(new InputStreamReader(this.getSocket().getInputStream())));
             
-            this.setOut( new DataOutputStream(this.getSocket().getOutputStream()) );
+            this.setOut(new DataOutputStream(this.getSocket().getOutputStream()));
         }
     }
     
     public boolean canBeUsedFor(URI uri) {
-        return creationUri.getHost() == uri.getHost()
-                && creationUri.getPort() == uri.getPort();
+        return creationUri.getHost() == uri.getHost() && creationUri.getPort() == uri.getPort();
     }
-
+    
     public Socket getSocket() {
         return socket;
     }
-
+    
     private void setSocket(Socket socket) {
         this.socket = socket;
     }
-
+    
     public BufferedReader getIn() {
         return in;
     }
-
+    
     private void setIn(BufferedReader in) {
         this.in = in;
     }
-
+    
     public DataOutputStream getOut() {
         return out;
     }
-
+    
     private void setOut(DataOutputStream out) {
         this.out = out;
     }
