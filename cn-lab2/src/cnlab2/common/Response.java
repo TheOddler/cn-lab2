@@ -15,6 +15,7 @@ public class Response extends HTTPMessage {
         setHeader(new HTTPResponseHeader(message, status, version));
         setContent(content);
         getHeader().addHeaderField("Content-Length", Integer.toString(getContentLength()));
+        getHeader().addHeaderField("Content-Type", "text/html");
     }
     
     private int getContentLength() {

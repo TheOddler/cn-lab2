@@ -19,7 +19,7 @@ public class Server {
         ExecutorService executor = Executors.newFixedThreadPool(5);
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
-            Runnable worker = new Handler(connectionSocket);
+            Runnable worker = new Worker(connectionSocket);
             executor.execute(worker);
         }
     }

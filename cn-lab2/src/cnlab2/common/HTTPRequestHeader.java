@@ -50,11 +50,12 @@ public class HTTPRequestHeader extends HTTPHeader {
         headerBuilder.append(" ");
         headerBuilder.append(getVersion());
         headerBuilder.append("\n");
-        headerBuilder.append("Host: ");
-        headerBuilder.append(uri.getHost());
-        headerBuilder.append(":");
-        headerBuilder.append(uri.getPort());
-        headerBuilder.append("\n");
+        for (String key : getHeaderMap().keySet()) {
+            headerBuilder.append(key);
+            headerBuilder.append(": ");
+            headerBuilder.append(getHeaderMap().get(key));
+            headerBuilder.append("\n");
+        }
         
         return headerBuilder.toString();
     }
