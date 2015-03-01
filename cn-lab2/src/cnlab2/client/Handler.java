@@ -18,14 +18,14 @@ public abstract class Handler {
 		setClient(client);
 		setUri(uri);
 		
-		smartSocket = getClient().getSmartSocketFor(getUri());
+		this.setSmartSocket(getClient().getSmartSocketFor(getUri()));
 	}
 	
 	public abstract String getCommand();
 	
 	public void send() throws IOException {
 		Request request = new Request(getCommand(), getUri(), client.getVersion(), "");
-		sendRequest(smartSocket, request);
+		sendRequest(getSmartSocket(), request);
 		
 		System.out.println(request);
 	}
@@ -35,7 +35,7 @@ public abstract class Handler {
 	}
 	
 	public Response receive() throws IOException {
-		return getResponse(smartSocket);
+		return getResponse(getSmartSocket());
 	}
 	
 	protected Response getResponse(SmartSocket smartSocket) throws IOException {
@@ -59,5 +59,13 @@ public abstract class Handler {
 	private void setUri(URI uri) {
 		this.uri = uri;
 	}
+
+    public SmartSocket getSmartSocket() {
+        return smartSocket;
+    }
+
+    private void setSmartSocket(SmartSocket smartSocket) {
+        this.smartSocket = smartSocket;
+    }
 
 }

@@ -13,15 +13,18 @@ public class HTTP10Client extends Client {
 		super();
 	}
 
+	// Simply return a new socket for every request.
 	@Override
 	public SmartSocket getSmartSocketFor(URI uri) throws UnknownHostException, IOException {
 		return new SmartSocket(uri);
 	}
-
+	
+	// Handle a single http1.0 command.
 	@Override
 	public void handle(String command, URI uri) throws UnknownHostException, IOException {
 		Handler handler;
 		
+		// Create a proper handler based on the command.
 		switch (command) {
 		case "GET":
 			handler = new GETHandler(this, uri);
@@ -36,10 +39,16 @@ public class HTTP10Client extends Client {
 			throw new IllegalArgumentException("Unknown command");
 		}
 		
+		// Let the handler send its request.
 		handler.send();
+		// Receive the response.
 		Response response = handler.receive();
 		
+		// Print the response.
 		System.out.print(response);
+		
+		// Close the connection.
+		handler.getSmartSocket().getSocket().close();
 	}
 
 	@Override

@@ -17,7 +17,9 @@ public class HTTP11Client extends Client{
 	public HTTP11Client() {
 		super();
 	}
-	
+
+	// Returns the same SmartSocket if the uri host:port are the same.
+    @Override
 	public SmartSocket getSmartSocketFor(URI uri) throws UnknownHostException, IOException {
 	    // check if we already made a smart socket for this uri
 	    for (SmartSocket socket: knownSockets) {
@@ -63,7 +65,6 @@ public class HTTP11Client extends Client{
 			throw new IllegalArgumentException("Unknown command");
 		}
 		
-		//TODO Pipelining
 		try {
     		handler.send();
             handler.send();

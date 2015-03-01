@@ -5,7 +5,6 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import cnlab2.common.Request;
-import cnlab2.common.SmartSocket;
 import cnlab2.common.URI;
 
 public class POSTHandler extends Handler {
@@ -37,8 +36,7 @@ public class POSTHandler extends Handler {
 		
 		Request r = new Request(getCommand(),getUri(),getClient().getVersion(),content);
 		
-        SmartSocket smartSocket = getClient().getSmartSocketFor(getUri());
-		sendRequest(smartSocket, r);
+		sendRequest(getSmartSocket(), r);
 		
 		sc.close();
 	}
