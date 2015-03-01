@@ -1,5 +1,6 @@
 package cnlab2.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -28,7 +29,7 @@ public class Handler implements Runnable {
         try {
             while (!getSocket().getSocket().isClosed()) {
                 Request r = new Request(getSocket().getIn());
-                System.out.println(r);
+                System.out.println("Got request:\n" + r.toString());
                 switch (r.getHeader().getCommand()) {
                     case "GET":
                         handleGet(r);
@@ -56,7 +57,10 @@ public class Handler implements Runnable {
     
     private void handleGet(Request req) throws IOException {
         Response resp = new Response(req.getHeader().getVersion(), 200, "OK", "<html> hi </html>");
-        System.out.println(resp);
+        System.out.println("Looking for file: " + ROOT_DIR + req.getHeader().getUri().getResource());
+        System.out.println("Sending response:\n" + resp.toString());
         getSocket().getOut().writeBytes(resp.toString());
     }
+    
+    private static final String ROOT_DIR = System.getProperty("user.dir") + "server-root" + File.pathSeparator;
 }
