@@ -1,5 +1,8 @@
 package cnlab2.client;
 
+import java.util.List;
+
+import cnlab2.common.Response;
 import cnlab2.common.URI;
 
 public abstract class StupidClient {
@@ -25,7 +28,8 @@ public abstract class StupidClient {
 			throw new IllegalAccessException("Invalid version: " + version);
 		}
 		
-		client.handle(command, uri);
+		List<Response> responses = client.handle(new HTTPCommand(command, uri));
+		System.out.print(responses);
 	}
 	
 	private static final int INDEX_COMMAND = 0;

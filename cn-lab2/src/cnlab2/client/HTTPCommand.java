@@ -1,27 +1,31 @@
 package cnlab2.client;
 
-public enum HTTPCommand {
-	GET, POST, HEAD,PUT, DELETE, OPTIONS, TRACE;
-	
-	public static HTTPCommand parseCommand(String commandstr){
-		switch (commandstr)
-		{
-		case "GET":
-			return GET;
-		case "POST":
-			return POST;
-		case "HEAD":
-			return HEAD;
-		case "PUT":
-			return PUT;
-		case "DELETE":
-			return DELETE;
-		case "OPTIONS":
-			return OPTIONS;
-		case "TRACE":
-			return TRACE;
-		default:
-			throw new IllegalArgumentException("You're an idiot");
-		}
-	}
+import cnlab2.common.URI;
+
+public class HTTPCommand {
+    private String command;
+    private URI uri;
+    
+    public HTTPCommand(String command, URI uri) {
+        this.setCommand(command);
+        this.setUri(uri);
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    private void setCommand(String command) {
+        this.command = command;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    private void setUri(URI uri) {
+        this.uri = uri;
+    }
+    
+    
 }

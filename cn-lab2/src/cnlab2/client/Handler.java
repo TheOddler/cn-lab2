@@ -25,6 +25,7 @@ public abstract class Handler {
 	
 	public void send() throws IOException {
 		Request request = new Request(getCommand(), getUri(), client.getVersion(), "");
+		request.getHeader().addHeaderField("Host", uri.getHost() +":"+ uri.getPort());
 		sendRequest(getSmartSocket(), request);
 		
 		System.out.println(request);

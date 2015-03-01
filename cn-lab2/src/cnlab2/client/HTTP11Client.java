@@ -38,53 +38,56 @@ public class HTTP11Client extends Client{
 	}
 	
 	@Override
-	public void handle(String command, URI uri) throws UnknownHostException, IOException {
-		Handler handler;
+	public List<Response> handle(HTTPCommand... commands) throws UnknownHostException, IOException {
 		
-		switch (command) {
-		case "GET":
-			handler =  new GETHandler(this, uri);
-			break;
-		case "HEAD":
-			handler =  new HEADHandler(this, uri);
-			break;
-		case "POST":
-			handler =  new POSTHandler(this, uri);
-			break;
-		case "TRACE":
-			handler =  new TRACEHandler(this, uri);
-			break;
-		case "OPTIONS":
-			handler =  new OPTIONSHandler(this, uri);
-			break;
-		case "PUT":
-		case "DELETE":
-		case "CONNECT":
-			throw new IllegalArgumentException("Command not yet implemented");
-		default:
-			throw new IllegalArgumentException("Unknown command");
-		}
-		
-		try {
-    		handler.send();
-            handler.send();
-    		
-    		Handler secondHandler;
-            
-            secondHandler = new HEADHandler(this, new URI("http://www.google.be/?gfe_rd=cr&ei=BTnyVLiwF4WeOsCRgcgH", 80));
-            secondHandler.send();
-            
-            Response response = handler.receive();
-            System.out.print("Eerste: " + response);
-            
-            Response response2 = handler.receive();
-            System.out.print("Eerste nog eens: " + response2);
-            
-            Response secondResponse = secondHandler.receive();
-            System.out.print("Tweede: " + secondResponse);
-        } catch (Exception e) {
-            
+	    List<Handler> handlers = new ArrayList<Handler>();
+	    
+	    for (HTTPCommand command: commands) {
+	        handlers.add(getHandlerFor(command.getCommand(), command.getUri()));
+	    }
+	    
+	    // Allows for pipelining if multiple requests are send through the same socket.
+	    for(Handler handler: handlers) {
+	        handler.send();
+	    }
+	    
+	    List<Response> responses = new ArrayList<Response>();
+	    
+	    for(Handler handler: handlers) {
+            responses.add(handler.receive());
         }
+	    
+	    return responses;
+	}
+	
+	private Handler getHandlerFor(String command, URI uri) throws UnknownHostException, IOException {
+	    Handler handler;
+        
+        switch (command) {
+        case "GET":
+            handler =  new GETHandler(this, uri);
+            break;
+        case "HEAD":
+            handler =  new HEADHandler(this, uri);
+            break;
+        case "POST":
+            handler =  new POSTHandler(this, uri);
+            break;
+        case "TRACE":
+            handler =  new TRACEHandler(this, uri);
+            break;
+        case "OPTIONS":
+            handler =  new OPTIONSHandler(this, uri);
+            break;
+        case "PUT":
+        case "DELETE":
+        case "CONNECT":
+            throw new IllegalArgumentException("Command not yet implemented");
+        default:
+            throw new IllegalArgumentException("Unknown command");
+        }
+        
+        return handler;
 	}
 
 	@Override
