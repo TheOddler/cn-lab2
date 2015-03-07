@@ -42,7 +42,7 @@ public class HTTPMessage {
         return header;
     }
 
-    public void setHeader(HTTPHeader header) {
+    protected void setHeader(HTTPHeader header) {
         this.header = header;
     }
 	

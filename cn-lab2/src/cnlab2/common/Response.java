@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Response extends HTTPMessage {
-    private HTTPResponseHeader header;
+    //private HTTPResponseHeader header;
     
     public Response(BufferedReader in) throws IOException {
         setHeader(new HTTPResponseHeader(in));
@@ -26,12 +26,13 @@ public class Response extends HTTPMessage {
         return getHeader().toString() + "\n" + getContent() + "\n";
     }
     
+    @Override
     public HTTPResponseHeader getHeader() {
-        return this.header;
+        return (HTTPResponseHeader) super.getHeader();
     }
     
-    private void setHeader(HTTPResponseHeader header) {
-        this.header = header;
+    protected void setHeader(HTTPResponseHeader header) {
+        super.setHeader(header);
     }
     
 }
