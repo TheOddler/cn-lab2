@@ -51,7 +51,16 @@ public class SmartSocket {
     
     public byte[] getBytes(int n) throws IOException {
         byte[] bytes = new byte[n];
-        in.read(bytes);
+        
+        for (int i = 0; i < n; ++i) {
+            bytes[i] = (byte)in.read();
+        }
+        
+        /*int realn = in.read(bytes);
+        if (n != realn) {
+            System.out.println("TOO SHORT CONTENT OOH NOOOEEESSS!!!!! " + realn);
+        }*/
+        
         return bytes;
     }
     

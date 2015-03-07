@@ -8,7 +8,7 @@ import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
 import cnlab2.common.URI;
 
-public class HEADHandler extends Handler {
+public class HEADHandler extends GETHandler {
     
     public HEADHandler(Client client, URI uri) throws UnknownHostException, IOException {
         super(client, uri);

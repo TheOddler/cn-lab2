@@ -1,5 +1,8 @@
 package cnlab2.common;
 
+import java.io.File;
+import java.util.Date;
+
 public class URI {
     private String protocol;
     private String host;
@@ -88,6 +91,23 @@ public class URI {
     
     private void setPort(int port) {
         this.port = port;
+    }
+    
+    public Date getLocalLastModifiedDate() {
+        File f = new File(getLocalLocation());
+        if (!f.exists()) {
+            return null;
+        }
+        
+        Long lastModified = f.lastModified();
+        Date lastModifiedDate = new Date(lastModified);
+        return lastModifiedDate;
+    }
+    
+    public String getLocalLocation() {
+        String resource = getResource();
+        if (resource.equals("/")) resource = "/index.html";
+        return "/Users/Pablo/Documents/Projects/CN-Lab2/cn-lab2/server-root/" + resource;
     }
     
     private static final String DEFAULT_RESOURCE = "/index.html";

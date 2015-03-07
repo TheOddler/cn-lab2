@@ -3,14 +3,21 @@ package cnlab2.common;
 import java.io.IOException;
 
 public class Response extends HTTPMessage {
-    // private HTTPResponseHeader header;
+    private URI uri;
     
     protected Response() {
     }
     
-    public Response(SmartSocket ss) throws IOException {
+    public Response(SmartSocket ss, URI uri) throws IOException {
         setHeader(new HTTPResponseHeader(ss));
-        readContent(ss);
+        setUri(uri);
+        
+        // UGLY! FIXME
+        if (getHeader().getFirstLine().contains("200")) {
+            readContent(ss);
+        }
+        
+        System.out.println(getHeader());
     }
     
     public Response(String version, int status, String message, String content) {
@@ -31,6 +38,14 @@ public class Response extends HTTPMessage {
     
     protected void setHeader(HTTPResponseHeader header) {
         super.setHeader(header);
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    private void setUri(URI uri) {
+        this.uri = uri;
     }
     
 }

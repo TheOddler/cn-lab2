@@ -41,11 +41,11 @@ public abstract class Handler {
     }
     
     protected Response getResponse(SmartSocket smartSocket) throws IOException {
-        Response resp = new Response(smartSocket);
+        Response resp = new Response(smartSocket, uri);
         
         // System.out.println("Response:\n" + resp.toString().replaceAll("\n",
         // "/n").replaceAll("\r", "/r"));
-        System.out.println("Response:\n" + resp.toString());
+        //System.out.println("Response:\n" + resp.toString());
         return resp;
     }
     

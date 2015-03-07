@@ -1,9 +1,6 @@
 package cnlab2.client;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import cnlab2.common.Response;
 import cnlab2.common.URI;
@@ -31,24 +28,14 @@ public abstract class StupidClient {
             throw new IllegalAccessException("Invalid version: " + version);
         }
         
-        List<Response> responses = client.handle(new HTTPCommand(command, uri));
+        HTTPCommand comm = new HTTPCommand(command, uri);
+        List<Response> responses = client.handle(comm);
         
-        // Print images sources
-        System.out.println();
-        System.out.println("IMAGES:");
-        
-        List<String> resoruces = new ArrayList<>();
         Response response = responses.get(0);
-        if (response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
-            String imgRegex = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
-            Pattern p = Pattern.compile(imgRegex);
-            Matcher m = p.matcher(new String(response.getContent()));
-            while (m.find()) {
-                resoruces.add(m.group(1));
-            }
+        if (command.equals("GET") && response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
+            SimpletonBrowser browser = new SimpletonBrowser();
+            browser.Browse(responses.get(0), client);
         }
-        
-        System.out.println(resoruces);
     }
     
     private static final int INDEX_COMMAND = 0;
