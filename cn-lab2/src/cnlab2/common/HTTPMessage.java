@@ -3,44 +3,37 @@ package cnlab2.common;
 import java.io.IOException;
 
 public class HTTPMessage {
-    private String content;
+    private byte[] content;
     private HTTPHeader header;
-
-    protected void readContent(SmartSocket in) throws IOException {
-        StringBuilder contentBuilder = new StringBuilder();
-        int totalRead = 0;
-        String line;
+    
+    protected void readContent(SmartSocket ss) throws IOException {
         if (getHeader().getHeaderMap().containsKey("Content-Length")) {
             int length = Integer.parseInt(getHeader().getHeaderMap().get("Content-Length"));
-            while (totalRead < length) {
-                line = in.readLine();
-                if (line == null) break;
-
-                contentBuilder.append(line);
-
-                totalRead += line.length();
-                totalRead += 1; // the newline character
-            }
+            byte[] content = ss.getBytes(length);
+            setContent(content);
+        } else {
+            throw new IllegalArgumentException("No content length field");
         }
-
-        if (contentBuilder.toString().equals("")) contentBuilder.append("\n");
-        setContent(contentBuilder.toString());
     }
-
-    public String getContent() {
+    
+    public byte[] getContent() {
         return content;
     }
-
-    public void setContent(String content) {
+    
+    public String getContentString() {
+        return new String(getContent());
+    }
+    
+    public void setContent(byte[] content) {
         this.content = content;
     }
-
+    
     public HTTPHeader getHeader() {
         return header;
     }
-
+    
     public void setHeader(HTTPHeader header) {
         this.header = header;
     }
-
+    
 }

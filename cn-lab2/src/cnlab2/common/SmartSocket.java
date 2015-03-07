@@ -1,9 +1,9 @@
 package cnlab2.common;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -11,12 +11,12 @@ public class SmartSocket {
     private URI creationUri;
     
     private Socket socket;
-    private InputStream in;
+    private BufferedInputStream in;
     private DataOutputStream out;
     
     public SmartSocket(Socket socket) throws IOException {
         setSocket(socket);
-        setIn(socket.getInputStream());
+        setIn(new BufferedInputStream(socket.getInputStream()));
         setOut(new DataOutputStream(socket.getOutputStream()));
     }
     
@@ -31,7 +31,7 @@ public class SmartSocket {
         if (socket == null || socket.isClosed()) {
             this.setSocket(new Socket(this.creationUri.getHost(), this.creationUri.getPort()));
             
-            setIn(this.getSocket().getInputStream());
+            setIn(new BufferedInputStream(getSocket().getInputStream()));
             
             this.setOut(new DataOutputStream(this.getSocket().getOutputStream()));
         }
@@ -61,9 +61,16 @@ public class SmartSocket {
     
     public String readLine() throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        int c;
+        int c = 0;
         
-        for (c = in.read(); c != '\n' && c != -1; c = in.read()) {
+        while (true) {
+            c = in.read();
+            if (c == '\n') {
+                break;
+            }
+            if (c == -1) {
+                break;
+            }
             byteArrayOutputStream.write(c);
         }
         in.mark(2);
@@ -75,12 +82,16 @@ public class SmartSocket {
         return line;
     }
     
-    private void setIn(InputStream in) {
-        this.in = in;
+    public void send(byte[] bytes) throws IOException {
+        out.write(bytes);
     }
     
-    public DataOutputStream getOut() {
-        return out;
+    public void send(String str) throws IOException {
+        out.writeBytes(str);
+    }
+    
+    private void setIn(BufferedInputStream in) {
+        this.in = in;
     }
     
     private void setOut(DataOutputStream out) {

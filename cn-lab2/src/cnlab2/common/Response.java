@@ -5,24 +5,28 @@ import java.io.IOException;
 public class Response extends HTTPMessage {
     //private HTTPResponseHeader header;
     
-    public Response(SmartSocket in) throws IOException {
-        setHeader(new HTTPResponseHeader(in));
-        readContent(in);
+    protected Response() {
+    }
+    
+    public Response(SmartSocket ss) throws IOException {
+        System.out.println("reading header");
+        setHeader(new HTTPResponseHeader(ss));
+        readContent(ss);
     }
     
     public Response(String version, int status, String message, String content) {
         setHeader(new HTTPResponseHeader(message, status, version));
-        setContent(content);
+        setContent(content.getBytes());
         getHeader().addHeaderField("Content-Length", Integer.toString(getContentLength()));
         getHeader().addHeaderField("Content-Type", "text/html");
     }
     
     private int getContentLength() {
-        return getContent().length();
+        return getContent().length;
     }
     
     public String toString() {
-        return getHeader().toString() + "\n" + getContent() + "\n";
+        return getHeader().toString() + new String(getContent());
     }
     
     @Override

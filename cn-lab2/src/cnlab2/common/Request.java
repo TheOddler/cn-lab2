@@ -1,17 +1,21 @@
 package cnlab2.common;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Request extends HTTPMessage {
     private HTTPRequestHeader header;
     
-    public Request(BufferedReader in) throws IOException {
-        setHeader(new HTTPRequestHeader(in));
-        readContent(in);
+    public Request(SmartSocket ss) throws IOException {
+        setHeader(new HTTPRequestHeader(ss));
+        readContent(ss);
     }
     
     public Request(String command, URI uri, String version, String content) {
+        setHeader(new HTTPRequestHeader(command, uri, version));
+        setContent(content.getBytes());
+    }
+    
+    public Request(String command, URI uri, String version, byte[] content) {
         setHeader(new HTTPRequestHeader(command, uri, version));
         setContent(content);
     }
@@ -21,14 +25,8 @@ public class Request extends HTTPMessage {
         StringBuilder requestBuilder = new StringBuilder();
         
         requestBuilder.append(getHeader());
-        
-        if (!getContent().isEmpty()) {
-            requestBuilder.append("\n"); // blank line between headers & content
-            requestBuilder.append(getContent());
-        }
-        
-        requestBuilder.append("\n");
-        
+        requestBuilder.append(new String(getContent()));
+        requestBuilder.append("\r\n\r\n");
         return requestBuilder.toString();
     }
     

@@ -1,6 +1,5 @@
 package cnlab2.common;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 public class HTTPRequestHeader extends HTTPHeader {
@@ -13,14 +12,14 @@ public class HTTPRequestHeader extends HTTPHeader {
         setUri(uri);
     }
     
-    public HTTPRequestHeader(BufferedReader in) throws IOException {
-        super(in);
-        parseURI(in);
+    public HTTPRequestHeader(SmartSocket ss) throws IOException {
+        super(ss);
+        parseURI(ss);
     }
     
     @Override
-    protected void parseFirstLine(BufferedReader in) throws IOException {
-        String statusLine = in.readLine();
+    protected void parseFirstLine(SmartSocket ss) throws IOException {
+        String statusLine = ss.readLine();
         
         int firstSpace = statusLine.indexOf(" ");
         String command = statusLine.substring(0, firstSpace);
@@ -33,7 +32,7 @@ public class HTTPRequestHeader extends HTTPHeader {
         setCommand(command);
     }
     
-    private void parseURI(BufferedReader in) {
+    private void parseURI(SmartSocket ss) {
         String host = getHeaderMap().containsKey("Host") ? getHeaderMap().get("Host") : DEFAULT_HOST;
         int port = DEFAULT_PORT;
         URI uri = new URI(host, getUri().getResource());
@@ -49,13 +48,14 @@ public class HTTPRequestHeader extends HTTPHeader {
         headerBuilder.append(getUri().getResource());
         headerBuilder.append(" ");
         headerBuilder.append(getVersion());
-        headerBuilder.append("\n");
+        headerBuilder.append("\r\n");
         for (String key : getHeaderMap().keySet()) {
             headerBuilder.append(key);
             headerBuilder.append(": ");
             headerBuilder.append(getHeaderMap().get(key));
-            headerBuilder.append("\n");
+            headerBuilder.append("\r\n");
         }
+        headerBuilder.append("\r\n");
         
         return headerBuilder.toString();
     }
