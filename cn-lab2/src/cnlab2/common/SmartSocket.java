@@ -1,9 +1,9 @@
 package cnlab2.common;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -11,12 +11,12 @@ public class SmartSocket {
     private URI creationUri;
     
     private Socket socket;
-    private BufferedReader in;
+    private InputStream in;
     private DataOutputStream out;
     
     public SmartSocket(Socket socket) throws IOException {
         setSocket(socket);
-        setIn(new BufferedReader(new InputStreamReader(socket.getInputStream())));
+        setIn(socket.getInputStream());
         setOut(new DataOutputStream(socket.getOutputStream()));
     }
     
@@ -31,7 +31,7 @@ public class SmartSocket {
         if (socket == null || socket.isClosed()) {
             this.setSocket(new Socket(this.creationUri.getHost(), this.creationUri.getPort()));
             
-            setIn(new BufferedReader(new InputStreamReader(this.getSocket().getInputStream())));
+            setIn(this.getSocket().getInputStream());
             
             this.setOut(new DataOutputStream(this.getSocket().getOutputStream()));
         }
@@ -49,11 +49,33 @@ public class SmartSocket {
         this.socket = socket;
     }
     
-    public BufferedReader getIn() {
-        return in;
+    public byte[] getBytes(int n) throws IOException {
+        byte[] bytes = new byte[n];
+        in.read(bytes);
+        return bytes;
     }
     
-    private void setIn(BufferedReader in) {
+    public String getString(int n) throws IOException {
+        return new String(getBytes(n));
+    }
+    
+    public String readLine() throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int c;
+        
+        for (c = in.read(); c != '\n' && c != -1; c = in.read()) {
+            byteArrayOutputStream.write(c);
+        }
+        in.mark(2);
+        int cp = in.read();
+        if (cp != '\r') in.reset();
+        
+        if (c == -1 && byteArrayOutputStream.size() == 0) { return null; }
+        String line = byteArrayOutputStream.toString("UTF-8");
+        return line;
+    }
+    
+    private void setIn(InputStream in) {
         this.in = in;
     }
     

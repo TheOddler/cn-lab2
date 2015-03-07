@@ -1,12 +1,11 @@
 package cnlab2.common;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Response extends HTTPMessage {
     //private HTTPResponseHeader header;
     
-    public Response(BufferedReader in) throws IOException {
+    public Response(SmartSocket in) throws IOException {
         setHeader(new HTTPResponseHeader(in));
         readContent(in);
     }
