@@ -37,7 +37,7 @@ public class POSTHandler extends Handler {
                 break;
             }
             contentBuilder.append(current);
-            contentBuilder.append("\n");
+            contentBuilder.append("\r\n");
             previous = current;
         }
         

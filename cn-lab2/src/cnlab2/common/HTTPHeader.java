@@ -19,6 +19,8 @@ public abstract class HTTPHeader {
     
     protected abstract void parseFirstLine(SmartSocket ss) throws IOException;
     
+    protected abstract String getFirstLine();
+    
     private void parseMap(SmartSocket ss) throws IOException {
         String line;
         boolean readyForKey = true;
@@ -44,6 +46,20 @@ public abstract class HTTPHeader {
             }
         }
         
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder headerBuilder = new StringBuilder();
+        
+        headerBuilder.append(getFirstLine());
+        for (String key : getHeaderMap().keySet()) {
+            headerBuilder.append(key);
+            headerBuilder.append(": ");
+            headerBuilder.append(getHeaderMap().get(key));
+            headerBuilder.append("\r\n");
+        }
+        return headerBuilder.toString();
     }
     
     public String getVersion() {

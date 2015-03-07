@@ -65,17 +65,22 @@ public class SmartSocket {
         
         while (true) {
             c = in.read();
-            if (c == '\n') {
+            
+            if (c == -1) {
                 break;
             }
-            if (c == -1) {
+            if (c == '\r') {
+                in.mark(2);
+                c = in.read();
+                if (c == '\n') {
+                    break;
+                }
+            }
+            if (c == '\n') {
                 break;
             }
             byteArrayOutputStream.write(c);
         }
-        in.mark(2);
-        int cp = in.read();
-        if (cp != '\r') in.reset();
         
         if (c == -1 && byteArrayOutputStream.size() == 0) { return null; }
         String line = byteArrayOutputStream.toString("UTF-8");

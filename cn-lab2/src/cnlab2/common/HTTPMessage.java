@@ -28,6 +28,16 @@ public class HTTPMessage {
         this.content = content;
     }
     
+    @Override
+    public String toString() {
+        StringBuilder messageBuilder = new StringBuilder();
+        
+        messageBuilder.append(getHeader());
+        messageBuilder.append("\r\n");
+        messageBuilder.append(getContentString());
+        return messageBuilder.toString();
+    }
+    
     public HTTPHeader getHeader() {
         return header;
     }

@@ -30,7 +30,9 @@ public abstract class Handler {
     }
     
     protected void sendRequest(SmartSocket smartSocket, Request req) throws IOException {
-        System.out.println("Request (" + getCommand() + "):\n" + req + "\nEnd req\n");
+        // System.out.println("Request:\n" + req.toString().replaceAll("\n",
+        // "/n").replaceAll("\r", "/r"));
+        System.out.println("Request:\n" + req.toString());
         smartSocket.send(req.toString());
     }
     
@@ -41,8 +43,9 @@ public abstract class Handler {
     protected Response getResponse(SmartSocket smartSocket) throws IOException {
         Response resp = new Response(smartSocket);
         
-        System.out.println("Response (" + getCommand() + "):\n" + resp + "\nEnd resp\n");
-        
+        // System.out.println("Response:\n" + resp.toString().replaceAll("\n",
+        // "/n").replaceAll("\r", "/r"));
+        System.out.println("Response:\n" + resp.toString());
         return resp;
     }
     

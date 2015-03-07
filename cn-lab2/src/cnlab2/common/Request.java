@@ -20,16 +20,6 @@ public class Request extends HTTPMessage {
         setContent(content);
     }
     
-    @Override
-    public String toString() {
-        StringBuilder requestBuilder = new StringBuilder();
-        
-        requestBuilder.append(getHeader());
-        requestBuilder.append(new String(getContent()));
-        requestBuilder.append("\r\n\r\n");
-        return requestBuilder.toString();
-    }
-    
     public HTTPRequestHeader getHeader() {
         return this.header;
     }

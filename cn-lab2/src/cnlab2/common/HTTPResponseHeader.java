@@ -32,6 +32,11 @@ public class HTTPResponseHeader extends HTTPHeader {
         setMessage(statusMessageStr);
     }
     
+    @Override
+    protected String getFirstLine() {
+        return getVersion() + " " + getStatus() + " " + getMessage() + "\r\n";
+    }
+    
     public int getStatus() {
         return status;
     }
@@ -46,24 +51,6 @@ public class HTTPResponseHeader extends HTTPHeader {
     
     private void setMessage(String message) {
         this.message = message;
-    }
-    
-    public String toString() {
-        StringBuilder headerBuilder = new StringBuilder();
-        headerBuilder.append(getVersion());
-        headerBuilder.append(" ");
-        headerBuilder.append(getStatus());
-        headerBuilder.append(" ");
-        headerBuilder.append(getMessage());
-        headerBuilder.append("\r\n");
-        for (String key : getHeaderMap().keySet()) {
-            headerBuilder.append(key);
-            headerBuilder.append(": ");
-            headerBuilder.append(getHeaderMap().get(key));
-            headerBuilder.append("\r\n");
-        }
-        headerBuilder.append("\r\n");
-        return headerBuilder.toString();
     }
     
 }

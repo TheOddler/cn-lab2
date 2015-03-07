@@ -3,13 +3,12 @@ package cnlab2.common;
 import java.io.IOException;
 
 public class Response extends HTTPMessage {
-    //private HTTPResponseHeader header;
+    // private HTTPResponseHeader header;
     
     protected Response() {
     }
     
     public Response(SmartSocket ss) throws IOException {
-        System.out.println("reading header");
         setHeader(new HTTPResponseHeader(ss));
         readContent(ss);
     }
@@ -23,10 +22,6 @@ public class Response extends HTTPMessage {
     
     private int getContentLength() {
         return getContent().length;
-    }
-    
-    public String toString() {
-        return getHeader().toString() + new String(getContent());
     }
     
     @Override

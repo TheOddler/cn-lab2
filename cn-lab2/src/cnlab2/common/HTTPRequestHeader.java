@@ -39,27 +39,6 @@ public class HTTPRequestHeader extends HTTPHeader {
         setUri(uri);
     }
     
-    @Override
-    public String toString() {
-        StringBuilder headerBuilder = new StringBuilder();
-        
-        headerBuilder.append(command);
-        headerBuilder.append(" ");
-        headerBuilder.append(getUri().getResource());
-        headerBuilder.append(" ");
-        headerBuilder.append(getVersion());
-        headerBuilder.append("\r\n");
-        for (String key : getHeaderMap().keySet()) {
-            headerBuilder.append(key);
-            headerBuilder.append(": ");
-            headerBuilder.append(getHeaderMap().get(key));
-            headerBuilder.append("\r\n");
-        }
-        headerBuilder.append("\r\n");
-        
-        return headerBuilder.toString();
-    }
-    
     public URI getUri() {
         return uri;
     }
@@ -78,4 +57,9 @@ public class HTTPRequestHeader extends HTTPHeader {
     
     private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_PORT = 80;
+    
+    @Override
+    protected String getFirstLine() {
+        return getCommand() + " " + getUri().getResource() + " " + getVersion() + "\r\n";
+    }
 }
