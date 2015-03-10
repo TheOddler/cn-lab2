@@ -108,13 +108,10 @@ public class URI {
         String host = getHost();
         String resource = getResource();
         if (resource.equals("/")) resource = "/index.html";
-        return getLocalRootPath() + host + resource;
+        return LocalRootPath + host + resource;
     }
     
-    public String getLocalRootPath() {
-        // TODO: Make not-hard-coded.
-        return "/Users/Pablo/Documents/Projects/CN-Lab2/cn-lab2/server-root/";
-    }
+    private static final String LocalRootPath = System.getProperty("user.dir") + "/server-root/";
     
     private static final String DEFAULT_RESOURCE = "/index.html";
     private static final String DEFAULT_PROTOCOL = "http";
