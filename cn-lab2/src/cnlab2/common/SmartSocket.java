@@ -38,7 +38,9 @@ public class SmartSocket {
     }
     
     public boolean canBeUsedFor(URI uri) {
-        return creationUri.getHost() == uri.getHost() && creationUri.getPort() == uri.getPort();
+        boolean equalHosts = creationUri.getHost().equals(uri.getHost());
+        boolean equalPorts = creationUri.getPort() == uri.getPort();
+        return equalHosts && equalPorts;
     }
     
     public Socket getSocket() {
@@ -110,5 +112,10 @@ public class SmartSocket {
     
     private void setOut(DataOutputStream out) {
         this.out = out;
+    }
+    
+    @Override
+    public String toString() {
+        return "Socket [host=" + creationUri.getHost() + ", port=" + creationUri.getPort() + "]";
     }
 }

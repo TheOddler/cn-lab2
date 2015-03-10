@@ -23,7 +23,7 @@ public class HTTP10Client extends Client {
     
     // Handle a single http1.0 command.
     @Override
-    public List<Response> handle(HTTPCommand... commands) throws UnknownHostException, IOException {
+    public List<Response> handle(List<HTTPCommand> commands) throws UnknownHostException, IOException {
         List<Response> responses = new ArrayList<Response>();
         
         for (HTTPCommand command : commands) {

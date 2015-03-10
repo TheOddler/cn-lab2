@@ -12,12 +12,13 @@ public class Response extends HTTPMessage {
         setHeader(new HTTPResponseHeader(ss));
         setUri(uri);
         
-        // UGLY! FIXME
+        // Only read content if it was a successful response
         if (getHeader().getFirstLine().contains("200")) {
             readContent(ss);
         }
-        
-        System.out.println(getHeader());
+        else {
+            setContent(new byte[0]);
+        }
     }
     
     public Response(String version, int status, String message, String content) {
@@ -46,6 +47,25 @@ public class Response extends HTTPMessage {
 
     private void setUri(URI uri) {
         this.uri = uri;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder messageBuilder = new StringBuilder();
+        
+        messageBuilder.append(getHeader());
+        messageBuilder.append("\r\n");
+        
+        String type = getHeader().getHeaderField("Content-Type");
+        
+        if (type.contains("text")) {
+            messageBuilder.append(getContentString());
+        }
+        else if (!type.equals("")) {
+            messageBuilder.append("Type: \"" + type + "\"");
+        }
+        
+        return messageBuilder.toString();
     }
     
 }

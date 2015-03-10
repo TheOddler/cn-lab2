@@ -30,10 +30,10 @@ public abstract class Handler {
     }
     
     protected void sendRequest(SmartSocket smartSocket, Request req) throws IOException {
-        // System.out.println("Request:\n" + req.toString().replaceAll("\n",
-        // "/n").replaceAll("\r", "/r"));
-        System.out.println("Request:\n" + req.toString());
+        System.out.println("\nSending request:");
+        System.out.println(req.toString());
         smartSocket.send(req.toString());
+        System.out.println("\nFinished sending request.");
     }
     
     public Response receive() throws IOException {
@@ -41,11 +41,10 @@ public abstract class Handler {
     }
     
     protected Response getResponse(SmartSocket smartSocket) throws IOException {
+        System.out.println("\nReceiving response:");
         Response resp = new Response(smartSocket, uri);
-        
-        // System.out.println("Response:\n" + resp.toString().replaceAll("\n",
-        // "/n").replaceAll("\r", "/r"));
-        //System.out.println("Response:\n" + resp.toString());
+        System.out.println(resp.toString());
+        System.out.println("\nFinished receiving response.");
         return resp;
     }
     

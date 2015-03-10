@@ -105,9 +105,15 @@ public class URI {
     }
     
     public String getLocalLocation() {
+        String host = getHost();
         String resource = getResource();
         if (resource.equals("/")) resource = "/index.html";
-        return "/Users/Pablo/Documents/Projects/CN-Lab2/cn-lab2/server-root/" + resource;
+        return getLocalRootPath() + host + resource;
+    }
+    
+    public String getLocalRootPath() {
+        // TODO: Make not-hard-coded.
+        return "/Users/Pablo/Documents/Projects/CN-Lab2/cn-lab2/server-root/";
     }
     
     private static final String DEFAULT_RESOURCE = "/index.html";

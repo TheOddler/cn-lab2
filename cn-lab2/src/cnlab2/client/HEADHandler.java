@@ -8,7 +8,7 @@ import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
 import cnlab2.common.URI;
 
-public class HEADHandler extends GETHandler {
+public class HEADHandler extends Handler {
     
     public HEADHandler(Client client, URI uri) throws UnknownHostException, IOException {
         super(client, uri);
@@ -19,11 +19,12 @@ public class HEADHandler extends GETHandler {
         return "HEAD";
     }
     
+    @Override
     protected Response getResponse(SmartSocket smartSocket) throws IOException {
+        System.out.println("\nReceiving response:");
         Response resp = new ContentlessResponse(smartSocket);
-        
-        System.out.println("Response (" + getCommand() + "):\n" + resp + "\nEnd resp\n");
-        
+        System.out.println(resp.toString());
+        System.out.println("\nFinished receiving response:");
         return resp;
     }
 }

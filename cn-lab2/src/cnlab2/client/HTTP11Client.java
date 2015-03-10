@@ -25,6 +25,8 @@ public class HTTP11Client extends Client{
 	    for (SmartSocket socket: knownSockets) {
 	        // see if this socket can be used for this uri
 	        if (socket.canBeUsedFor(uri)) {
+	            System.out.println("Re-using socket: " + socket.toString()
+	                    + " for " + uri.toString());
 	            // refresh smartsocket, reopening it if it was closed
                 socket.RefreshIfNeeded();
                 // if it's open, return it.
@@ -32,13 +34,16 @@ public class HTTP11Client extends Client{
 	        }
 	    }
 	    
+	    System.out.println("No socket to reuse, creation new one for " + uri.toString());
+	    
 	    SmartSocket newSocket = new SmartSocket(uri);
 	    knownSockets.add(newSocket);
 	    return newSocket;
 	}
 	
+    
 	@Override
-	public List<Response> handle(HTTPCommand... commands) throws UnknownHostException, IOException {
+	public List<Response> handle(List<HTTPCommand> commands) throws UnknownHostException, IOException {
 		
 	    List<Handler> handlers = new ArrayList<Handler>();
 	    

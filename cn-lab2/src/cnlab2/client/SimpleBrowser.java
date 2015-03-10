@@ -1,7 +1,6 @@
 package cnlab2.client;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
 import cnlab2.common.Response;
 import cnlab2.common.URI;
 
-public class SimpletonBrowser {
+public class SimpleBrowser {
     
     public void Browse(Response response, Client client) throws UnknownHostException, IOException, IllegalAccessException {
         
@@ -41,9 +40,7 @@ public class SimpletonBrowser {
             }
         }
         
-        HTTPCommand[] stockArr = new HTTPCommand[toGet.size()];
-        stockArr = toGet.toArray(stockArr);
-        List<Response> responses = client.handle(stockArr);
+        List<Response> responses = client.handle(toGet);
         
         System.out.println("\nImages:");
         System.out.println(responses.size());

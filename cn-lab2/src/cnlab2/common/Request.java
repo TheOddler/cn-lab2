@@ -3,7 +3,6 @@ package cnlab2.common;
 import java.io.IOException;
 
 public class Request extends HTTPMessage {
-    private HTTPRequestHeader header;
     
     public Request(SmartSocket ss) throws IOException {
         setHeader(new HTTPRequestHeader(ss));
@@ -20,12 +19,27 @@ public class Request extends HTTPMessage {
         setContent(content);
     }
     
+    @Override
     public HTTPRequestHeader getHeader() {
-        return this.header;
+        return (HTTPRequestHeader) super.getHeader();
     }
     
     private void setHeader(HTTPRequestHeader header) {
-        this.header = header;
+        super.setHeader(header);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder messageBuilder = new StringBuilder();
+        
+        messageBuilder.append(getHeader());
+        messageBuilder.append("\r\n");
+        
+        if (getContent() != null) {
+            messageBuilder.append(getContentString());
+        }
+        
+        return messageBuilder.toString();
     }
     
 }

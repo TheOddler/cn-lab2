@@ -6,7 +6,17 @@ public class ContentlessResponse extends Response {
     
     public ContentlessResponse(SmartSocket ss) throws IOException {
         setHeader(new HTTPResponseHeader(ss));
-        setContent(null);
+        setContent(new byte[0]);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder messageBuilder = new StringBuilder();
+        
+        messageBuilder.append(getHeader());
+        messageBuilder.append("\r\n");
+        
+        return messageBuilder.toString();
     }
     
 }

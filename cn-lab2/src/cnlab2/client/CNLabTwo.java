@@ -1,11 +1,10 @@
 package cnlab2.client;
 
-import java.util.List;
 
 import cnlab2.common.Response;
 import cnlab2.common.URI;
 
-public abstract class StupidClient {
+public abstract class CNLabTwo {
     
     public static void main(String[] args) throws Exception {
         
@@ -29,12 +28,11 @@ public abstract class StupidClient {
         }
         
         HTTPCommand comm = new HTTPCommand(command, uri);
-        List<Response> responses = client.handle(comm);
+        Response response = client.handle(comm);
         
-        Response response = responses.get(0);
         if (command.equals("GET") && response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
-            SimpletonBrowser browser = new SimpletonBrowser();
-            browser.Browse(responses.get(0), client);
+            SimpleBrowser browser = new SimpleBrowser();
+            browser.Browse(response, client);
         }
     }
     
