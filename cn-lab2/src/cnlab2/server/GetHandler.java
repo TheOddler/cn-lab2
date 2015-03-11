@@ -1,6 +1,5 @@
 package cnlab2.server;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -20,16 +19,18 @@ public class GetHandler extends Handler {
     
     @Override
     public Response handle() throws IOException {
-        String pathStr = getRequest().getHeader().getUri().getResource();
-        if (getRequest().getHeader().getUri().getResource().equals("/")) {
-            pathStr = "index.html";
-        }
+        // TODO check ifchanged header
+        // TODO other file types
+        // TODO other error codes
+        
+        String pathStr = getRequest().getHeader().getUri().getLocalLocation();
         
         // Find path of file
-        Path path = Paths.get(StupidServer.ROOT_DIR + File.separator + pathStr);
+        Path path = Paths.get(pathStr);
         System.out.println("Looking for file: " + path.toString());
         
         // Read file to string
+        // TODO always just read bytes
         List<String> strings = Files.readAllLines(path, Charset.defaultCharset());
         StringBuilder contentBuilder = new StringBuilder();
         for (String s : strings) {

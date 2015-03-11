@@ -12,7 +12,8 @@ public abstract class HTTPMessage {
             byte[] content = ss.getBytes(length);
             setContent(content);
         } else {
-            throw new IllegalArgumentException("No content length field");
+            setContent(new byte[0]);
+            // throw new IllegalArgumentException("No content length field");
         }
     }
     

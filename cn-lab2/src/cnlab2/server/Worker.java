@@ -27,7 +27,7 @@ public class Worker implements Runnable {
     public void run() {
         try {
             while (!getSocket().getSocket().isClosed()) {
-                Request r = new Request(getSocket().getIn());
+                Request r = new Request(getSocket());
                 System.out.println("Got request:\n" + r.toString());
                 Handler h = null;
                 switch (r.getHeader().getCommand()) {
@@ -41,25 +41,19 @@ public class Worker implements Runnable {
                         break;
                     case "POST":
                         break;
-                    case "OPTIONS":
-                        break;
-                    case "TRACE":
-                        break;
                     default:
                         System.out.println("Command not supported: " + r.getHeader().getCommand());
                         return;
                 }
                 Response resp = h.handle();
-                getSocket().getOut().writeBytes(resp.toString());
+                getSocket().send(resp.toString());
+                // TODO fix pipelining if in HTTP 1.1
             }
             
         } catch (IOException e) {
             System.out.println("Something went wrong while handling a request.");
             e.printStackTrace();
         }
-    }
-    
-    private void handleGet(Request req) throws IOException {
     }
     
 }

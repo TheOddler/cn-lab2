@@ -4,7 +4,7 @@ package cnlab2.client;
 import cnlab2.common.Response;
 import cnlab2.common.URI;
 
-public abstract class CNLabTwo {
+public abstract class CNLabTwoClient {
     
     public static void main(String[] args) throws Exception {
         

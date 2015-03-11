@@ -16,7 +16,7 @@ public class Server {
     public void start() throws IOException {
         ServerSocket welcomeSocket = new ServerSocket(getPort());
         
-        ExecutorService executor = Executors.newFixedThreadPool(5);
+        ExecutorService executor = Executors.newFixedThreadPool(4);
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
             Runnable worker = new Worker(connectionSocket);
