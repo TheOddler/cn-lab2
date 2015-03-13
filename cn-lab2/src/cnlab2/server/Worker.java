@@ -52,6 +52,7 @@ public class Worker implements Runnable {
             
         } catch (IOException e) {
             System.out.println("Something went wrong while handling a request.");
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }

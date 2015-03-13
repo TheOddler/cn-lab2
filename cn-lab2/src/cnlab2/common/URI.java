@@ -19,6 +19,11 @@ public class URI {
         this(DEFAULT_PROTOCOL, host, resource);
     }
     
+    public URI(String host, String resource, int port) {
+        this (host, resource);
+        setPort(port);
+    }
+    
     public URI(String uriStr, int port) throws IllegalAccessException {
         if (uriStr == null) { throw new IllegalAccessException("null URI gotten"); }
         

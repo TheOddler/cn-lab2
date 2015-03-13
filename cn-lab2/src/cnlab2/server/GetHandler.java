@@ -1,11 +1,9 @@
 package cnlab2.server;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import cnlab2.common.Request;
 import cnlab2.common.Response;
@@ -31,21 +29,52 @@ public class GetHandler extends Handler {
         
         // Read file to string
         // TODO always just read bytes
-        List<String> strings = Files.readAllLines(path, Charset.defaultCharset());
-        StringBuilder contentBuilder = new StringBuilder();
-        for (String s : strings) {
-            contentBuilder.append(s);
-            contentBuilder.append("\n");
+        byte[] content;
+        if (Files.exists(path)) {
+            content = Files.readAllBytes(path);
         }
-        String content = contentBuilder.toString();
+        else {
+            content = new byte[0];
+        }
         
         // Construct a response
-        Response resp = new Response(getRequest().getHeader().getVersion(), 200, "OK", content);
+        Response resp = new Response(
+                getRequest().getHeader().getVersion(),
+                200,
+                "OK",
+                typeOfPath(path.toString()),
+                content);
         
         // Send the response
         System.out.println("Sending response:\n" + resp.toString());
         return resp;
         
+    }
+    
+    public String typeOfPath(String path) {
+        int i = path.lastIndexOf(".");
+        String extension = path.substring(i+1);
+        String type;
+        
+        switch (extension) {
+            case "gif":
+            case "png":
+            case "jpg":
+                type = "image";
+                break;
+            case "html":
+            case "txt":
+            case "md":
+            case "css":
+            case "js":
+                type = "text";
+                break;
+            default:
+                type = "unknown";
+                break;
+        }
+        
+        return type + "/" + extension;
     }
     
 }

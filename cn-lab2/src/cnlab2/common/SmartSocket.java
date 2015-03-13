@@ -93,7 +93,10 @@ public class SmartSocket {
             byteArrayOutputStream.write(c);
         }
         
-        if (c == -1 && byteArrayOutputStream.size() == 0) { return null; }
+        if (c == -1 && byteArrayOutputStream.size() == 0) {
+            System.out.println("c: " + c + "; size: " + byteArrayOutputStream.size());
+            return null;
+        }
         String line = byteArrayOutputStream.toString("UTF-8");
         return line;
     }

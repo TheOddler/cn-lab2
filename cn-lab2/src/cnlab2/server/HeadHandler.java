@@ -16,11 +16,8 @@ public class HeadHandler extends Handler {
     public Response handle() throws IOException {
         GetHandler h = new GetHandler(getSocket(), getRequest());
         Response r = h.handle();
-        Response result = new Response(r.getHeader().getVersion(), r.getHeader().getStatus(), r.getHeader().getMessage(), "");
-        for (String s : r.getHeader().getHeaderMap().keySet()) {
-            result.getHeader().addHeaderField(s, r.getHeader().getHeaderMap().get(s));
-        }
-        return result;
+        r.setContent(new byte[0]);
+        return r;
     }
     
 }

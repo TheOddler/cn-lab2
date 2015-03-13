@@ -19,8 +19,19 @@ public class HTTPRequestHeader extends HTTPHeader {
     
     @Override
     protected void parseFirstLine(SmartSocket ss) throws IOException {
+        
         String statusLine = ss.readLine();
         
+        /*while (statusLine == null) {
+            statusLine = ss.readLine();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) { }
+            
+            System.out.println("Waiting for request.");
+        }*/
+        
+        System.out.println("Parsing: " + statusLine);
         int firstSpace = statusLine.indexOf(" ");
         String command = statusLine.substring(0, firstSpace);
         int secondSpace = statusLine.indexOf(" ", firstSpace + " ".length());
@@ -35,7 +46,12 @@ public class HTTPRequestHeader extends HTTPHeader {
     private void parseURI(SmartSocket ss) {
         String host = getHeaderMap().containsKey("Host") ? getHeaderMap().get("Host") : DEFAULT_HOST;
         int port = DEFAULT_PORT;
-        URI uri = new URI(host, getUri().getResource());
+        if (host.contains(":")) {
+            int i = host.indexOf(":");
+            port = Integer.parseInt(host.substring(i+1));
+            host = host.substring(0,i);
+        }
+        URI uri = new URI(host, getUri().getResource(), port);
         setUri(uri);
     }
     

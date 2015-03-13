@@ -21,11 +21,11 @@ public class Response extends HTTPMessage {
         }
     }
     
-    public Response(String version, int status, String message, String content) {
+    public Response(String version, int status, String message, String type, byte[] content) {
         setHeader(new HTTPResponseHeader(message, status, version));
-        setContent(content.getBytes());
+        setContent(content);
         getHeader().addHeaderField("Content-Length", Integer.toString(getContentLength()));
-        getHeader().addHeaderField("Content-Type", "text/html");
+        getHeader().addHeaderField("Content-Type", type);
     }
     
     private int getContentLength() {
