@@ -6,6 +6,7 @@ import java.net.Socket;
 import cnlab2.common.Request;
 import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
+import cnlab2.common.SocketClosedException;
 
 public class Worker implements Runnable {
     
@@ -46,13 +47,14 @@ public class Worker implements Runnable {
                         return;
                 }
                 Response resp = h.handle();
-                getSocket().send(resp.toString());
+                getSocket().send(resp);
                 // TODO fix pipelining if in HTTP 1.1
             }
-            
         } catch (IOException e) {
             System.out.println("Something went wrong while handling a request.");
             System.out.println(e.getMessage());
+            e.printStackTrace();
+        } catch (SocketClosedException e) {
             e.printStackTrace();
         }
     }

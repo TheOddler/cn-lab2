@@ -70,7 +70,7 @@ public class SmartSocket {
         return new String(getBytes(n));
     }
     
-    public String readLine() throws IOException {
+    public String readLine() throws IOException, SocketClosedException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int c = 0;
         
@@ -94,8 +94,7 @@ public class SmartSocket {
         }
         
         if (c == -1 && byteArrayOutputStream.size() == 0) {
-            System.out.println("c: " + c + "; size: " + byteArrayOutputStream.size());
-            return null;
+            throw new SocketClosedException("Socket has been closed");
         }
         String line = byteArrayOutputStream.toString("UTF-8");
         return line;
@@ -107,6 +106,11 @@ public class SmartSocket {
     
     public void send(String str) throws IOException {
         out.writeBytes(str);
+    }
+    
+    public void send(Response resp) throws IOException {
+        out.writeBytes(resp.getHeader().toString() + "\r\n");
+        out.write(resp.getContent());
     }
     
     private void setIn(BufferedInputStream in) {

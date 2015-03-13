@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Request extends HTTPMessage {
     
-    public Request(SmartSocket ss) throws IOException {
+    public Request(SmartSocket ss) throws IOException, SocketClosedException {
         setHeader(new HTTPRequestHeader(ss));
         readContent(ss);
     }

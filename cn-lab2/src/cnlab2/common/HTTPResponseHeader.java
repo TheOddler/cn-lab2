@@ -13,12 +13,12 @@ public class HTTPResponseHeader extends HTTPHeader {
         setStatus(status);
     }
     
-    public HTTPResponseHeader(SmartSocket ss) throws IOException {
+    public HTTPResponseHeader(SmartSocket ss) throws IOException, SocketClosedException {
         super(ss);
     }
     
     @Override
-    protected void parseFirstLine(SmartSocket ss) throws IOException {
+    protected void parseFirstLine(SmartSocket ss) throws IOException, SocketClosedException {
         String statusLine = ss.readLine(); // lines[0]
         
         int firstSpace = statusLine.indexOf(" ");

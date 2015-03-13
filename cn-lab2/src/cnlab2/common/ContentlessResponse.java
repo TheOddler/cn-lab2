@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class ContentlessResponse extends Response {
     
-    public ContentlessResponse(SmartSocket ss) throws IOException {
+    public ContentlessResponse(SmartSocket ss) throws IOException, SocketClosedException {
         setHeader(new HTTPResponseHeader(ss));
         setContent(new byte[0]);
     }

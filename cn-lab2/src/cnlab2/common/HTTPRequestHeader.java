@@ -12,13 +12,13 @@ public class HTTPRequestHeader extends HTTPHeader {
         setUri(uri);
     }
     
-    public HTTPRequestHeader(SmartSocket ss) throws IOException {
+    public HTTPRequestHeader(SmartSocket ss) throws IOException, SocketClosedException {
         super(ss);
         parseURI(ss);
     }
     
     @Override
-    protected void parseFirstLine(SmartSocket ss) throws IOException {
+    protected void parseFirstLine(SmartSocket ss) throws IOException, SocketClosedException {
         
         String statusLine = ss.readLine();
         

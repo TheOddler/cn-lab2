@@ -12,16 +12,16 @@ public abstract class HTTPHeader {
         setVersion(version);
     }
     
-    public HTTPHeader(SmartSocket ss) throws IOException {
+    public HTTPHeader(SmartSocket ss) throws IOException, SocketClosedException {
         parseFirstLine(ss);
         parseMap(ss);
     }
     
-    protected abstract void parseFirstLine(SmartSocket ss) throws IOException;
+    protected abstract void parseFirstLine(SmartSocket ss) throws IOException, SocketClosedException;
     
     protected abstract String getFirstLine();
     
-    private void parseMap(SmartSocket ss) throws IOException {
+    private void parseMap(SmartSocket ss) throws IOException, SocketClosedException {
         String line;
         boolean readyForKey = true;
         String key = null;

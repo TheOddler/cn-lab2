@@ -8,7 +8,7 @@ public class Response extends HTTPMessage {
     protected Response() {
     }
     
-    public Response(SmartSocket ss, URI uri) throws IOException {
+    public Response(SmartSocket ss, URI uri) throws IOException, SocketClosedException {
         setHeader(new HTTPResponseHeader(ss));
         setUri(uri);
         
