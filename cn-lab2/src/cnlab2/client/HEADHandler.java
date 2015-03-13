@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import cnlab2.common.ContentlessResponse;
 import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
+import cnlab2.common.SocketClosedException;
 import cnlab2.common.URI;
 
 public class HEADHandler extends Handler {
@@ -20,7 +21,7 @@ public class HEADHandler extends Handler {
     }
     
     @Override
-    protected Response getResponse(SmartSocket smartSocket) throws IOException {
+    protected Response getResponse(SmartSocket smartSocket) throws IOException, SocketClosedException {
         System.out.println("\nReceiving response:");
         Response resp = new ContentlessResponse(smartSocket);
         System.out.println(resp.toString());

@@ -7,6 +7,7 @@ import java.util.List;
 
 import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
+import cnlab2.common.SocketClosedException;
 import cnlab2.common.URI;
 
 public class HTTP10Client extends Client {
@@ -23,7 +24,7 @@ public class HTTP10Client extends Client {
     
     // Handle a single http1.0 command.
     @Override
-    public List<Response> handle(List<HTTPCommand> commands) throws UnknownHostException, IOException {
+    public List<Response> handle(List<HTTPCommand> commands) throws UnknownHostException, IOException, SocketClosedException {
         List<Response> responses = new ArrayList<Response>();
         
         for (HTTPCommand command : commands) {
@@ -33,7 +34,7 @@ public class HTTP10Client extends Client {
         return responses;
     }
     
-    public Response handleOne(String command, URI uri) throws UnknownHostException, IOException {
+    public Response handleOne(String command, URI uri) throws UnknownHostException, IOException, SocketClosedException {
         Handler handler;
         
         // Create a proper handler based on the command.

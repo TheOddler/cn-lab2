@@ -10,11 +10,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cnlab2.common.Response;
+import cnlab2.common.SocketClosedException;
 import cnlab2.common.URI;
 
 public class SimpleBrowser {
     
-    public void Browse(Response response, Client client) throws UnknownHostException, IOException, IllegalAccessException {
+    public void Browse(Response response, Client client) throws UnknownHostException, IOException, IllegalAccessException, SocketClosedException {
         
         SaveResponse(response);
         

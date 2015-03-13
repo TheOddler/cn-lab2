@@ -7,6 +7,7 @@ import java.util.List;
 
 import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
+import cnlab2.common.SocketClosedException;
 import cnlab2.common.URI;
 
 
@@ -43,7 +44,7 @@ public class HTTP11Client extends Client{
 	
     
 	@Override
-	public List<Response> handle(List<HTTPCommand> commands) throws UnknownHostException, IOException {
+	public List<Response> handle(List<HTTPCommand> commands) throws UnknownHostException, IOException, SocketClosedException {
 		
 	    List<Handler> handlers = new ArrayList<Handler>();
 	    

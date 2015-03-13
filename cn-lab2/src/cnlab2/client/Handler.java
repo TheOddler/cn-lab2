@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import cnlab2.common.Request;
 import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
+import cnlab2.common.SocketClosedException;
 import cnlab2.common.URI;
 
 public abstract class Handler {
@@ -36,11 +37,11 @@ public abstract class Handler {
         System.out.println("\nFinished sending request.");
     }
     
-    public Response receive() throws IOException {
+    public Response receive() throws IOException, SocketClosedException {
         return getResponse(getSmartSocket());
     }
     
-    protected Response getResponse(SmartSocket smartSocket) throws IOException {
+    protected Response getResponse(SmartSocket smartSocket) throws IOException, SocketClosedException {
         System.out.println("\nReceiving response:");
         Response resp = new Response(smartSocket, uri);
         System.out.println(resp.toString());
