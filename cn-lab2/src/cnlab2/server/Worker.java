@@ -30,6 +30,11 @@ public class Worker implements Runnable {
             while (!getSocket().getSocket().isClosed()) {
                 Request r = new Request(getSocket());
                 System.out.println("Got request:\n" + r.toString());
+                // TODO if http 1.1 check if host header is present
+                // this is mandatory, and if not present we should
+                // send an error.
+                
+                // Find proper handler for this request.
                 Handler h = null;
                 switch (r.getHeader().getCommand()) {
                     case "GET":
@@ -46,7 +51,8 @@ public class Worker implements Runnable {
                         break;
                     default:
                         System.out.println("Command not supported: " + r.getHeader().getCommand());
-                        return;
+                        h = new NotImplementedHandler(getSocket(), r);
+                        break;
                 }
                 Response resp = h.handle();
                 System.out.println("Sending response: " + resp.toString());
@@ -55,9 +61,10 @@ public class Worker implements Runnable {
         } catch (IOException e) {
             System.out.println("Something went wrong while handling a request.");
             System.out.println(e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (SocketClosedException e) {
-            e.printStackTrace();
+            System.out.println("Socket has been closed, stopping worker here.");
+            //e.printStackTrace();
         }
         
         System.out.println("Closing this worker.");
