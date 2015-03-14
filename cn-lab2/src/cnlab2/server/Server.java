@@ -16,11 +16,15 @@ public class Server {
     public void start() throws IOException {
         ServerSocket welcomeSocket = new ServerSocket(getPort());
         
-        ExecutorService executor = Executors.newFixedThreadPool(4);
-        while (true) {
-            Socket connectionSocket = welcomeSocket.accept();
-            Runnable worker = new Worker(connectionSocket);
-            executor.execute(worker);
+        try {
+            ExecutorService executor = Executors.newFixedThreadPool(4);
+            while (true) {
+                Socket connectionSocket = welcomeSocket.accept();
+                Runnable worker = new Worker(connectionSocket);
+                executor.execute(worker);
+            }
+        } finally {
+            welcomeSocket.close();
         }
     }
     

@@ -33,38 +33,45 @@ public class Worker implements Runnable {
                 // TODO if http 1.1 check if host header is present
                 // this is mandatory, and if not present we should
                 // send an error.
-                
-                // Find proper handler for this request.
-                Handler h = null;
-                switch (r.getHeader().getCommand()) {
-                    case "GET":
-                        h = new GetHandler(getSocket(), r);
-                        break;
-                    case "HEAD":
-                        h = new HeadHandler(getSocket(), r);
-                        break;
-                    case "PUT":
-                        h = new PutHandler(getSocket(), r);
-                        break;
-                    case "POST":
-                        h = new PostHandler(getSocket(), r);
-                        break;
-                    default:
-                        System.out.println("Command not supported: " + r.getHeader().getCommand());
-                        h = new NotImplementedHandler(getSocket(), r);
-                        break;
+                Response resp;
+                if (r.getHeader().getVersion().equals("HTTP/1.1") && !r.getHeader().getHeaderMap().containsKey("Host")) {
+                    // SEND ERROR
+                    resp = new Response("HTTP/1.1", 400, "Bad Request");
+                } else {
+                    
+                    // Find proper handler for this request.
+                    Handler h = null;
+                    switch (r.getHeader().getCommand()) {
+                        case "GET":
+                            h = new GetHandler(getSocket(), r);
+                            break;
+                        case "HEAD":
+                            h = new HeadHandler(getSocket(), r);
+                            break;
+                        case "PUT":
+                            h = new PutHandler(getSocket(), r);
+                            break;
+                        case "POST":
+                            h = new PostHandler(getSocket(), r);
+                            break;
+                        default:
+                            System.out.println("Command not supported: " + r.getHeader().getCommand());
+                            h = new NotImplementedHandler(getSocket(), r);
+                            break;
+                    }
+                    
+                    resp = h.handle();
                 }
-                Response resp = h.handle();
                 System.out.println("Sending response: " + resp.toString());
                 getSocket().send(resp);
             }
         } catch (IOException e) {
             System.out.println("Something went wrong while handling a request.");
             System.out.println(e.getMessage());
-            //e.printStackTrace();
+            // e.printStackTrace();
         } catch (SocketClosedException e) {
             System.out.println("Socket has been closed, stopping worker here.");
-            //e.printStackTrace();
+            // e.printStackTrace();
         }
         
         System.out.println("Closing this worker.");
