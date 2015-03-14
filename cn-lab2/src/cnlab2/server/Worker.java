@@ -59,6 +59,8 @@ public class Worker implements Runnable {
         } catch (SocketClosedException e) {
             e.printStackTrace();
         }
+        
+        System.out.println("Closing this worker.");
     }
     
 }

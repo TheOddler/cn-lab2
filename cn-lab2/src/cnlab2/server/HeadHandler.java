@@ -16,6 +16,8 @@ public class HeadHandler extends Handler {
     public Response handle() throws IOException {
         GetHandler h = new GetHandler(getSocket(), getRequest());
         Response r = h.handle();
+        // content length head will have been set already at this point.
+        // setting content back to empty array so nothing gets send.
         r.setContent(new byte[0]);
         return r;
     }
