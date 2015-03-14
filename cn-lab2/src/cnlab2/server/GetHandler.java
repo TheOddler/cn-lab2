@@ -23,9 +23,6 @@ public class GetHandler extends Handler {
     
     @Override
     public Response handle() throws IOException {
-        // TODO check ifchanged header
-        // TODO other file types
-        // TODO other error codes
         
         String pathStr = getRequest().getHeader().getUri().getLocalLocation();
         
@@ -44,7 +41,7 @@ public class GetHandler extends Handler {
             try {
                 DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
                 df.setTimeZone(TimeZone.getTimeZone("GMT"));
-            
+                
                 remoteDate = df.parse(dateString);
             } catch (ParseException e) {
                 System.out.println("Invalid date: " + dateString);
@@ -52,12 +49,10 @@ public class GetHandler extends Handler {
             
             if (remoteDate != null && remoteDate.before(localDate)) {
                 resp = getOKResponse(path);
-            }
-            else {
+            } else {
                 resp = getNotChangedResponse();
             }
-        }
-        else {
+        } else {
             resp = getNoFileResponse();
         }
         
@@ -69,9 +64,7 @@ public class GetHandler extends Handler {
     
     private Date getModifiedDate(Path path) {
         File f = path.toFile();
-        if (!f.exists()) {
-            return null;
-        }
+        if (!f.exists()) { return null; }
         
         Long lastModified = f.lastModified();
         Date lastModifiedDate = new Date(lastModified);
@@ -79,29 +72,16 @@ public class GetHandler extends Handler {
     }
     
     private Response getNotChangedResponse() {
-        return new Response(
-                getRequest().getHeader().getVersion(),
-                304,
-                "Not Modified");
+        return new Response(getRequest().getHeader().getVersion(), 304, "Not Modified");
     }
     
     private Response getOKResponse(Path path) throws IOException {
         byte[] content = Files.readAllBytes(path);
-        return new Response(
-                getRequest().getHeader().getVersion(),
-                200,
-                "OK",
-                typeOfPath(path.toString()),
-                content);
+        return new Response(getRequest().getHeader().getVersion(), 200, "OK", typeOfPath(path.toString()), content);
     }
     
     private Response getNoFileResponse() throws IOException {
-        return new Response(
-                getRequest().getHeader().getVersion(),
-                404,
-                "Not Found",
-                "text/html",
-                get404ResponseContent());
+        return new Response(getRequest().getHeader().getVersion(), 404, "Not Found", "text/html", get404ResponseContent());
     }
     
     private byte[] get404ResponseContent() throws IOException {
@@ -112,7 +92,7 @@ public class GetHandler extends Handler {
     
     public String typeOfPath(String path) {
         int i = path.lastIndexOf(".");
-        String extension = path.substring(i+1);
+        String extension = path.substring(i + 1);
         String type;
         
         switch (extension) {
