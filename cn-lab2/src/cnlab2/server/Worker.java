@@ -60,11 +60,18 @@ public class Worker implements Runnable {
                         
                         resp = h.handle();
                     }
-                } catch (Exception e) {
+                } catch (Exception e) { // Of course, if a closed connection was
+                                        // the cause of the error, this won't
+                                        // help.
                     resp = new Response(r.getHeader().getVersion(), 500, "Server Error");
                 }
                 System.out.println("Sending response: " + resp.toString());
                 getSocket().send(resp);
+                
+                // Yoda expression to make sure it works with a null.
+                if (r.getHeader().getVersion().equals("HTTP/1.1") && "close".equals(r.getHeader().getHeaderField("Connection"))) {
+                    break;
+                }
             }
         } catch (IOException e) {
             System.out.println("Something went wrong while handling a request.");
