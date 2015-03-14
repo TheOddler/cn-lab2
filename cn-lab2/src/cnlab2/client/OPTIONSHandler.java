@@ -3,7 +3,6 @@ package cnlab2.client;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-import cnlab2.common.ContentlessResponse;
 import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
 import cnlab2.common.SocketClosedException;

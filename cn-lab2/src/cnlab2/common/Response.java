@@ -28,6 +28,11 @@ public class Response extends HTTPMessage {
         getHeader().addHeaderField("Content-Type", type);
     }
     
+    public Response(String version, int status, String message) {
+        setHeader(new HTTPResponseHeader(message, status, version));
+        setContent(new byte[0]);
+    }
+    
     private int getContentLength() {
         return getContent().length;
     }

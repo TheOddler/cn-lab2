@@ -82,9 +82,7 @@ public class GetHandler extends Handler {
         return new Response(
                 getRequest().getHeader().getVersion(),
                 304,
-                "Not Modified",
-                "text/html",
-                new byte[0]);
+                "Not Modified");
     }
     
     private Response getOKResponse(Path path) throws IOException {

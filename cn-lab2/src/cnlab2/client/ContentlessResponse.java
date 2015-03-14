@@ -1,6 +1,11 @@
-package cnlab2.common;
+package cnlab2.client;
 
 import java.io.IOException;
+
+import cnlab2.common.HTTPResponseHeader;
+import cnlab2.common.Response;
+import cnlab2.common.SmartSocket;
+import cnlab2.common.SocketClosedException;
 
 public class ContentlessResponse extends Response {
     

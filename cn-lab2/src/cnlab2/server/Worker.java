@@ -39,16 +39,18 @@ public class Worker implements Runnable {
                         h = new HeadHandler(getSocket(), r);
                         break;
                     case "PUT":
+                        h = new PutHandler(getSocket(), r);
                         break;
                     case "POST":
+                        h = new PostHandler(getSocket(), r);
                         break;
                     default:
                         System.out.println("Command not supported: " + r.getHeader().getCommand());
                         return;
                 }
                 Response resp = h.handle();
+                System.out.println("Sending response: " + resp.toString());
                 getSocket().send(resp);
-                // TODO fix pipelining if in HTTP 1.1
             }
         } catch (IOException e) {
             System.out.println("Something went wrong while handling a request.");
