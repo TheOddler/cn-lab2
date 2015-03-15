@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * The abstract version of a http header
+ *
+ */
 public abstract class HTTPHeader {
     private String version;
     private final Map<String, String> headerMap = new LinkedHashMap<String, String>();
@@ -12,6 +16,12 @@ public abstract class HTTPHeader {
         setVersion(version);
     }
     
+    /**
+     * Create a http header by readin from a socket
+     * @param ss
+     * @throws IOException
+     * @throws SocketClosedException
+     */
     public HTTPHeader(SmartSocket ss) throws IOException, SocketClosedException {
         parseFirstLine(ss);
         parseMap(ss);
@@ -21,6 +31,12 @@ public abstract class HTTPHeader {
     
     protected abstract String getFirstLine();
     
+    /**
+     * Read all the headers from a socket
+     * @param ss
+     * @throws IOException
+     * @throws SocketClosedException
+     */
     private void parseMap(SmartSocket ss) throws IOException, SocketClosedException {
         String line;
         boolean readyForKey = true;

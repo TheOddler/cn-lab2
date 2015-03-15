@@ -2,12 +2,22 @@ package cnlab2.common;
 
 import java.io.IOException;
 
+/**
+ * A class representing an HTTP response from the server.
+ */
 public class Response extends HTTPMessage {
     private URI uri;
     
     protected Response() {
     }
     
+    /**
+     * Create a response by reading incoming data from a socket.
+     * @param ss The socket to read from
+     * @param uri The URI the request to which this response is responding to was send to
+     * @throws IOException
+     * @throws SocketClosedException
+     */
     public Response(SmartSocket ss, URI uri) throws IOException, SocketClosedException {
         setHeader(new HTTPResponseHeader(ss));
         setUri(uri);
@@ -21,6 +31,14 @@ public class Response extends HTTPMessage {
         }
     }
     
+    /**
+     * Create a response to be send
+     * @param version The http version for this response
+     * @param status The status number of this response
+     * @param message The status message
+     * @param type The type of the content to be send
+     * @param content The content to be send
+     */
     public Response(String version, int status, String message, String type, byte[] content) {
         setHeader(new HTTPResponseHeader(message, status, version));
         setContent(content);
@@ -28,6 +46,12 @@ public class Response extends HTTPMessage {
         getHeader().addHeaderField("Content-Type", type);
     }
     
+    /**
+     * Create a response without content
+     * @param version The http version
+     * @param status The status code
+     * @param message The status message
+     */
     public Response(String version, int status, String message) {
         setHeader(new HTTPResponseHeader(message, status, version));
         setContent(new byte[0]);
@@ -63,10 +87,12 @@ public class Response extends HTTPMessage {
         
         String type = getHeader().getHeaderField("Content-Type");
         
+        // Only show the content if it's text
         if (type.contains("text")) {
             messageBuilder.append(getContentString());
         }
         else if (!type.equals("")) {
+            // Just show the type if the content is something other than text.
             messageBuilder.append("Type: \"" + type + "\"");
         }
         

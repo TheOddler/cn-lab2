@@ -2,6 +2,10 @@ package cnlab2.common;
 
 import java.io.IOException;
 
+/**
+ * A class representing the headers of a response
+ * Contains both the first line of a response as the other headers.
+ */
 public class HTTPResponseHeader extends HTTPHeader {
     
     private int status;
@@ -13,10 +17,19 @@ public class HTTPResponseHeader extends HTTPHeader {
         setStatus(status);
     }
     
+    /**
+     * Create a header by reading from a socket
+     * @param ss
+     * @throws IOException
+     * @throws SocketClosedException
+     */
     public HTTPResponseHeader(SmartSocket ss) throws IOException, SocketClosedException {
         super(ss);
     }
     
+    /**
+     * Parese the first line of the headers
+     */
     @Override
     protected void parseFirstLine(SmartSocket ss) throws IOException, SocketClosedException {
         String statusLine = ss.readLine(); // lines[0]

@@ -2,6 +2,10 @@ package cnlab2.common;
 
 import java.io.IOException;
 
+/**
+ * A class representing the headers of a http request.
+ *
+ */
 public class HTTPRequestHeader extends HTTPHeader {
     private String command;
     private URI uri;
@@ -12,24 +16,24 @@ public class HTTPRequestHeader extends HTTPHeader {
         setUri(uri);
     }
     
+    /**
+     * Create the headers by reading from a socket
+     * @param ss
+     * @throws IOException
+     * @throws SocketClosedException
+     */
     public HTTPRequestHeader(SmartSocket ss) throws IOException, SocketClosedException {
         super(ss);
-        parseURI(ss);
+        parseURI();
     }
     
+    /**
+     * Read the first line of a request from a socket
+     */
     @Override
     protected void parseFirstLine(SmartSocket ss) throws IOException, SocketClosedException {
         
         String statusLine = ss.readLine();
-        
-        /*while (statusLine == null) {
-            statusLine = ss.readLine();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) { }
-            
-            System.out.println("Waiting for request.");
-        }*/
         
         System.out.println("Parsing: " + statusLine);
         int firstSpace = statusLine.indexOf(" ");
@@ -43,7 +47,10 @@ public class HTTPRequestHeader extends HTTPHeader {
         setCommand(command);
     }
     
-    private void parseURI(SmartSocket ss) {
+    /**
+     * Parse the URI if a host header is present
+     */
+    private void parseURI() {
         String host = getHeaderMap().containsKey("Host") ? getHeaderMap().get("Host") : DEFAULT_HOST;
         int port = DEFAULT_PORT;
         if (host.contains(":")) {
