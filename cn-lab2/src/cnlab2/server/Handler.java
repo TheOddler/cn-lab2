@@ -6,6 +6,10 @@ import cnlab2.common.Request;
 import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
 
+/**
+ * The base class for all handlers.
+ *
+ */
 public abstract class Handler {
     private SmartSocket socket;
     private Request request;

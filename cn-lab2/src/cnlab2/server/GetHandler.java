@@ -23,7 +23,7 @@ public class GetHandler extends Handler {
     
     @Override
     public Response handle() throws IOException {
-        
+        // Find the local location of the requested file
         String pathStr = getRequest().getHeader().getUri().getLocalLocation();
         
         // Find path of file
@@ -31,11 +31,14 @@ public class GetHandler extends Handler {
         System.out.println("Looking for file: " + path.toString());
         
         Response resp = null;
+        // Check when the wanted file was last modified (return null if the file doesn't exist)
         Date localDate = getModifiedDate(path);
         
         System.out.println("Local date: " + localDate);
         
+        // If the file exists
         if (localDate != null) {
+            // Check if an 'If-Modified-Since' header is present in the proper format
             Date remoteDate = null;
             String dateString = getRequest().getHeader().getHeaderField("If-Modified-Since");
             try {
@@ -47,16 +50,21 @@ public class GetHandler extends Handler {
                 System.out.println("Invalid date: " + dateString);
             }
             
+            // Check if the remote date is before out local
             if (remoteDate != null && remoteDate.before(localDate)) {
+                // if so send the updated file
                 resp = getOKResponse(path);
             } else {
+                // otherwise send a response saying nothing changed.
                 resp = getNotChangedResponse();
             }
         } else {
+            // If the requested file is not found
+            // send a 'Not Found' response.
             resp = getNoFileResponse();
         }
         
-        // Send the response
+        // Return the response
         System.out.println("Sending response:\n" + resp.toString());
         return resp;
         
@@ -64,8 +72,10 @@ public class GetHandler extends Handler {
     
     private Date getModifiedDate(Path path) {
         File f = path.toFile();
+        // if no file is found return null
         if (!f.exists()) { return null; }
         
+        // check the last modified date
         Long lastModified = f.lastModified();
         Date lastModifiedDate = new Date(lastModified);
         return lastModifiedDate;
@@ -81,6 +91,7 @@ public class GetHandler extends Handler {
     }
     
     private Response getNoFileResponse() throws IOException {
+        // returns a 404 page as content
         return new Response(getRequest().getHeader().getVersion(), 404, "Not Found", "text/html", get404ResponseContent());
     }
     
@@ -91,10 +102,12 @@ public class GetHandler extends Handler {
     }
     
     public String typeOfPath(String path) {
+        // find the extension
         int i = path.lastIndexOf(".");
         String extension = path.substring(i + 1);
         String type;
         
+        // check the type of the extension to known types.
         switch (extension) {
             case "gif":
             case "png":
@@ -113,6 +126,7 @@ public class GetHandler extends Handler {
                 break;
         }
         
+        // return the formatted type string.
         return type + "/" + extension;
     }
     

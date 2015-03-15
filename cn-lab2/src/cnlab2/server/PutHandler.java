@@ -11,12 +11,18 @@ import cnlab2.common.SmartSocket;
 
 public class PutHandler extends Handler {
     
+    /**
+     * Handler for a PUT request to the server
+     * @param socket
+     * @param request
+     */
     public PutHandler(SmartSocket socket, Request request) {
         super(socket, request);
     }
     
     @Override
     public Response handle() throws IOException {
+        // Find where the request wants to put the data
         String localLoc = getRequest().getHeader().getUri().getLocalLocation();
         System.out.println(localLoc);
         
@@ -27,12 +33,12 @@ public class PutHandler extends Handler {
         try{
             Response resp = null;
             
+            // Create a file object for the wanted location
             File file = new File(localLoc);
 
-            System.out.println("Checking if file exists");
-            //if file doesnt exists, then create it
+            // if file doesnt exists, then create it
+            // also create the proper response
             if (!file.exists()){
-                System.out.println("Creating new file.");
                 file.createNewFile();
                 resp = getCreatedResponse();
             }
@@ -40,29 +46,41 @@ public class PutHandler extends Handler {
                 resp = getNoContentResponse();
             }
             
-            System.out.println("appending to file");
-            
-            //true = append file
-            FileWriter fileWritter = getWriter(file);
+            // Write to the file
+            FileWriter fileWritter = getWriter(file); //gets the writer to use.
             BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+            // write the content
             bufferWritter.write(content);
             bufferWritter.close();
-
-            System.out.println("Appended, returning response.");
+            
+            // return the response to be send.
             return resp;
         }
         catch (IOException e){
             e.printStackTrace();
             
+            // if something went wrong while writing, return a
+            // failed response
             return getFailedResponse();
         }
     }
     
-    // for easy overriding with PostHandler ;)
+    /**
+     * Returns the writer to be used by this handler.
+     * @param file File to write to
+     * @return The writer, one that appends to the existing file.
+     * @throws IOException
+     */
     protected FileWriter getWriter(File file) throws IOException {
+        // True = append
+        // PUT appends, so we return a writer that appends to the file if one exists.
         return new FileWriter(file,true);
     }
     
+    /**
+     * Get a response for when a new file was created
+     * @return
+     */
     private Response getCreatedResponse() {
         return new Response(
                 getRequest().getHeader().getVersion(),
@@ -70,6 +88,12 @@ public class PutHandler extends Handler {
                 "Created"); 
     }
     
+    /**
+     * Get the response for when writing was successful
+     * We don't return the new content, just a simple response saying
+     * it was successful
+     * @return
+     */
     private Response getNoContentResponse() {
         // we return a response without content.
         // alternatively we could send a 200 with the
@@ -80,6 +104,10 @@ public class PutHandler extends Handler {
                 "No Content"); 
     }
     
+    /**
+     * Get the response for when something went wrong.
+     * @return
+     */
     private Response getFailedResponse() {
         return new Response(
                 getRequest().getHeader().getVersion(),
