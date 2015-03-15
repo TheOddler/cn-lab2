@@ -10,6 +10,10 @@ import cnlab2.common.SmartSocket;
 import cnlab2.common.SocketClosedException;
 import cnlab2.common.URI;
 
+/**
+ * A HTTP 1.0 client
+ *
+ */
 public class HTTP10Client extends Client {
     
     public HTTP10Client() {
@@ -28,6 +32,7 @@ public class HTTP10Client extends Client {
         List<Response> responses = new ArrayList<Response>();
         
         for (HTTPCommand command : commands) {
+            // Handle each command one by one.
             responses.add(handleOne(command.getCommand(), command.getUri()));
         }
         

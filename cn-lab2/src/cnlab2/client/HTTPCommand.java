@@ -2,6 +2,10 @@ package cnlab2.client;
 
 import cnlab2.common.URI;
 
+/**
+ * A simple wrapper for a command (string) and the uri it should be send to
+ *
+ */
 public class HTTPCommand {
     private String command;
     private URI uri;

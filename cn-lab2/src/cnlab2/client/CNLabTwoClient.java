@@ -12,12 +12,14 @@ public abstract class CNLabTwoClient {
             System.out.println("Usage: Command Uri Port Version");
         }
         
+        // Get the arguments
         String command = args[INDEX_COMMAND];
         int port = Integer.parseInt(args[INDEX_PORT]);
         URI uri = new URI(args[INDEX_URI], port);
         
         String version = args[INDEX_VERSION];
         
+        // Get the proper client based on the version argument
         Client client = null;
         if (version.equals("1.0")) {
             client = new HTTP10Client();
@@ -27,9 +29,11 @@ public abstract class CNLabTwoClient {
             throw new IllegalAccessException("Invalid version: " + version);
         }
         
+        // Handler the command given in the arguments
         HTTPCommand comm = new HTTPCommand(command, uri);
         Response response = client.handle(comm);
         
+        // If the argument was a GET, and we got a html page, then let our simple browser handle the rest.
         if (command.equals("GET") && response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
             SimpleBrowser browser = new SimpleBrowser();
             browser.Browse(response, client);

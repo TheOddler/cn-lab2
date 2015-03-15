@@ -7,6 +7,11 @@ import cnlab2.common.Response;
 import cnlab2.common.SmartSocket;
 import cnlab2.common.SocketClosedException;
 
+/**
+ * A response that doesn't read content even when the headers specify a content-length
+ * Used for head/options handlers
+ *
+ */
 public class ContentlessResponse extends Response {
     
     public ContentlessResponse(SmartSocket ss) throws IOException, SocketClosedException {

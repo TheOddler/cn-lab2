@@ -10,7 +10,10 @@ import cnlab2.common.SmartSocket;
 import cnlab2.common.SocketClosedException;
 import cnlab2.common.URI;
 
-
+/**
+ * A HTTP 1.1 client
+ *
+ */
 public class HTTP11Client extends Client{
 
     private final List<SmartSocket> knownSockets = new ArrayList<SmartSocket>();
@@ -48,17 +51,20 @@ public class HTTP11Client extends Client{
 		
 	    List<Handler> handlers = new ArrayList<Handler>();
 	    
+	    // Create a handler for each command
 	    for (HTTPCommand command: commands) {
 	        handlers.add(getHandlerFor(command.getCommand(), command.getUri()));
 	    }
 	    
 	    // Allows for pipelining if multiple requests are send through the same socket.
+	    // Send each handler before looking for responses
 	    for(Handler handler: handlers) {
 	        handler.send();
 	    }
 	    
 	    List<Response> responses = new ArrayList<Response>();
 	    
+	    // Now read all responses
 	    for(Handler handler: handlers) {
             responses.add(handler.receive());
         }
