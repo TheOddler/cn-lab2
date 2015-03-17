@@ -115,7 +115,7 @@ public class SimpleBrowser {
         // Let the client get all the images
         List<Response> responses = client.handle(toGet);
         
-        System.out.print("\nImage-count: ");
+        System.out.print("\nResource-count: ");
         System.out.println(responses.size());
         
         // Save all the images to disk
