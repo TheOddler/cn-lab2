@@ -31,32 +31,36 @@ public class GetHandler extends Handler {
         System.out.println("Looking for file: " + path.toString());
         
         Response resp = null;
-        // Check when the wanted file was last modified (return null if the file doesn't exist)
+        // Check when the wanted file was last modified (return null if the file
+        // doesn't exist)
         Date localDate = getModifiedDate(path);
         
         System.out.println("Local date: " + localDate);
         
         // If the file exists
         if (localDate != null) {
-            // Check if an 'If-Modified-Since' header is present in the proper format
+            // Check if an 'If-Modified-Since' header is present in the proper
+            // format
             Date remoteDate = null;
-            String dateString = getRequest().getHeader().getHeaderField("If-Modified-Since");
-            try {
-                DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
-                df.setTimeZone(TimeZone.getTimeZone("GMT"));
-                
-                remoteDate = df.parse(dateString);
-            } catch (ParseException e) {
-                System.out.println("Invalid date: " + dateString);
+            if (getRequest().getHeader().getHeaderMap().containsKey("If-Modified-Since")) {
+                String dateString = getRequest().getHeader().getHeaderField("If-Modified-Since");
+                try {
+                    DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+                    df.setTimeZone(TimeZone.getTimeZone("GMT"));
+                    
+                    remoteDate = df.parse(dateString);
+                } catch (ParseException e) {
+                    System.out.println("Invalid date: " + dateString);
+                }
             }
             
             // Check if the remote date is before out local
-            if (remoteDate != null && remoteDate.before(localDate)) {
+            if (remoteDate != null && remoteDate.after(localDate)) {
                 // if so send the updated file
-                resp = getOKResponse(path);
+                resp = getNotChangedResponse();
             } else {
                 // otherwise send a response saying nothing changed.
-                resp = getNotChangedResponse();
+                resp = getOKResponse(path);
             }
         } else {
             // If the requested file is not found
