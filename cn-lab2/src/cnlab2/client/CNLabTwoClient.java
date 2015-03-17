@@ -1,6 +1,5 @@
 package cnlab2.client;
 
-
 import cnlab2.common.Response;
 import cnlab2.common.URI;
 
@@ -33,10 +32,11 @@ public abstract class CNLabTwoClient {
         HTTPCommand comm = new HTTPCommand(command, uri);
         Response response = client.handle(comm);
         
-        // If the argument was a GET, and we got a html page, then let our simple browser handle the rest.
+        // If the argument was a GET, and we got a html page, then let our
+        // simple browser handle the rest.
         if (command.equals("GET") && response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
-            SimpleBrowser browser = new SimpleBrowser();
-            browser.Browse(response, client);
+            SimpleBrowser browser = new SimpleBrowser(response, client);
+            browser.Browse();
         }
     }
     

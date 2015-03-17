@@ -15,6 +15,7 @@ public class URI {
     
     /**
      * Contsructor for creating a URI without explicit port
+     * 
      * @param protocol
      * @param host
      * @param resource
@@ -27,6 +28,7 @@ public class URI {
     
     /**
      * Constructor for created a URI using the default protocol.
+     * 
      * @param host
      * @param resource
      */
@@ -36,25 +38,28 @@ public class URI {
     
     /**
      * Constructor to create a URI with the given port and default protocol.
+     * 
      * @param host
      * @param resource
      * @param port
      */
     public URI(String host, String resource, int port) {
-        this (host, resource);
+        this(host, resource);
         setPort(port);
+    }
+    
+    public URI(String str) throws IllegalAccessException {
+        this(str, DEFAULT_PORT);
     }
     
     /**
      * Constructor to create a uri based on a full string
-     * @param uriStr The uri string
-     *      Allowed formats:
-     *       http://example.com:80/some/path
-     *       http://example.com/some/path
-     *       http://example.com
-     *       example.com
-     *       example.com:80/some/path
-     *       example.com/some/path
+     * 
+     * @param uriStr
+     *            The uri string Allowed formats:
+     *            http://example.com:80/some/path http://example.com/some/path
+     *            http://example.com example.com example.com:80/some/path
+     *            example.com/some/path
      * @param port
      * @throws IllegalAccessException
      */
@@ -134,14 +139,12 @@ public class URI {
     
     /**
      * Get the date of the local version of the file this URI points to
-     * @return The date
-     *      Returns null if no file exists locally
+     * 
+     * @return The date Returns null if no file exists locally
      */
     public Date getLocalLastModifiedDate() {
         File f = new File(getLocalLocation());
-        if (!f.exists()) {
-            return null;
-        }
+        if (!f.exists()) { return null; }
         
         Long lastModified = f.lastModified();
         Date lastModifiedDate = new Date(lastModified);
@@ -150,6 +153,7 @@ public class URI {
     
     /**
      * Get the path of the local file this URI points to.
+     * 
      * @return
      */
     public String getLocalLocation() {
@@ -163,4 +167,5 @@ public class URI {
     
     private static final String DEFAULT_RESOURCE = "/index.html";
     private static final String DEFAULT_PROTOCOL = "http";
+    private static final int DEFAULT_PORT = 80;
 }
