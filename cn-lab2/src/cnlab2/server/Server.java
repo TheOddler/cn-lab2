@@ -27,7 +27,7 @@ public class Server {
         
         try {
             // Create a bunch of threads to handle incoming connections
-            ExecutorService executor = Executors.newFixedThreadPool(4);
+            ExecutorService executor = Executors.newCachedThreadPool();
             while (true) {
                 // Accept the incoming connection
                 Socket connectionSocket = welcomeSocket.accept();

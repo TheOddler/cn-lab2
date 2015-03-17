@@ -44,8 +44,15 @@ public class SimpleBrowser {
         saveResponse(this.response);
         int status = this.response.getHeader().getStatus();
         if (status == 200) { // okay
-            readStylesheets();
-            readImages();
+            if (response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
+                List<String> resources = new ArrayList<>();
+                
+                readLinkTags(resources);
+                readImages(resources);
+                readScriptTags(resources);
+                
+                fetchResources(resources);
+            }
         }
         if (status == 301 || status == 302) {// Moved
             if (this.response.getHeader().getHeaderMap().containsKey("Location")) {
@@ -66,38 +73,39 @@ public class SimpleBrowser {
         }
     }
     
-    private void readStylesheets() throws IllegalAccessException, IOException, SocketClosedException {
-        System.out.println("\nReading stylesheets:");
+    private void readLinkTags(List<String> resources) throws IllegalAccessException, IOException, SocketClosedException {
+        System.out.println("Reading link tags...");
         
-        List<String> resources = new ArrayList<>();
-        if (response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
-            String cssRegex = "<link[^>]+href=\"([^\"]+)\"[^>]+type=\"text\\/css\"[^>]*>";
-            Pattern p = Pattern.compile(cssRegex, Pattern.CASE_INSENSITIVE);
-            Matcher m = p.matcher(new String(response.getContent()));
-            while (m.find()) {
-                resources.add(m.group(1));
-            }
+        String cssRegex = "<link[^>]+href\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
+        Pattern p = Pattern.compile(cssRegex, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(new String(response.getContent()));
+        while (m.find()) {
+            resources.add(m.group(1));
         }
-        System.out.println(resources);
-        
-        fetchResources(resources);
     }
     
-    private void readImages() throws IllegalAccessException, IOException, IllegalAccessException, SocketClosedException {
+    private void readScriptTags(List<String> resources) throws IllegalAccessException, IOException, SocketClosedException {
+        System.out.println("Reading script tags...");
+        
+        String cssRegex = "<script[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
+        Pattern p = Pattern.compile(cssRegex, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(new String(response.getContent()));
+        while (m.find()) {
+            resources.add(m.group(1));
+        }
+    }
+    
+    private void readImages(List<String> resources) throws IllegalAccessException, IOException, IllegalAccessException, SocketClosedException {
         // Read in the images from this html page
-        System.out.println("\nReading images:");
+        System.out.println("Reading images...");
         
         // Find all img tags and get their resources
-        List<String> resources = new ArrayList<>();
-        if (response.getHeader().getHeaderField("Content-Type").contains("text/html")) {
-            String imgRegex = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
-            Pattern p = Pattern.compile(imgRegex, Pattern.CASE_INSENSITIVE);
-            Matcher m = p.matcher(new String(response.getContent()));
-            while (m.find()) {
-                resources.add(m.group(1));
-            }
+        String imgRegex = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
+        Pattern p = Pattern.compile(imgRegex, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(new String(response.getContent()));
+        while (m.find()) {
+            resources.add(m.group(1));
         }
-        fetchResources(resources);
     }
     
     public void fetchResources(List<String> resources) throws IllegalAccessException, IOException, IllegalAccessException, SocketClosedException {
@@ -106,18 +114,21 @@ public class SimpleBrowser {
         // Create commands to get each image
         List<HTTPCommand> toGet = new ArrayList<>();
         for (String res : resources) {
+            // Only fetch the local resources
             if (!res.contains("//")) {
                 String url = response.getUri().getHost() + "/" + res;
                 toGet.add(new HTTPCommand("GET", new URI(url, response.getUri().getPort())));
             }
         }
         
+        System.out.println("Checked " + resources.size() + " resources, of which " + toGet.size() + " were local.");
+        
         // Let the client get all the images
         List<Response> responses = client.handle(toGet);
         
-        System.out.print("\nResource-count: ");
-        System.out.println(responses.size());
+        System.out.println("Received resources: " + responses.size());
         
+        System.out.println("Saving them to disk...");
         // Save all the images to disk
         for (Response resp : responses) {
             saveResponse(resp);
